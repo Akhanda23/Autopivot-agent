@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AutoListing AI Demo</title>
+  <style>
+    :root {
+      --bg: #08111c;
+      --panel: #111b2a;
+      --panel-2: #172335;
+      --line: rgba(255,255,255,0.08);
+      --text: #eef5ff;
+      --muted: #98a8bf;
+      --accent: #1fe0a5;
+      --accent-2: #7ef8d8;
+      --warn: #ffca6b;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--text);
+      background: radial-gradient(circle at top, #19304f 0%, #08111c 42%, #060b12 100%);
+      min-height: 100vh;
+    }
+
+    .app {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .topbar,
+    .hero,
+    .workspace {
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: rgba(17,27,42,0.94);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.28);
+      backdrop-filter: blur(10px);
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      padding: 18px 22px;
+      margin-bottom: 24px;
+    }
+
+    .brand {
+      font-size: 1.2rem;
+      font-weight: 800;
+      letter-spacing: 0.2px;
+    }
+
+    .brand span { color: var(--accent); }
+
+    .pill {
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--accent);
+      border: 1px solid rgba(31,224,165,0.24);
+      background: rgba(31,224,165,0.1);
+    }
+
+    .hero {
+      padding: 46px 24px;
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .hero h1 {
+      margin: 0 0 14px;
+      font-size: clamp(2.3rem, 6vw, 4.8rem);
+      line-height: 0.98;
+    }
+
+    .hero h1 span { color: var(--accent); }
+
+    .hero p {
+      max-width: 820px;
+      margin: 0 auto 26px;
+      color: var(--muted);
+      line-height: 1.75;
+    }
+
+    .notice {
+      max-width: 840px;
+      margin: 0 auto 22px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: rgba(255,202,107,0.08);
+      border: 1px solid rgba(255,202,107,0.18);
+      color: #ffe2ab;
+      line-height: 1.6;
+      font-size: 0.92rem;
+    }
+
+    .controls {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+
+    .dropzone {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 30px 18px;
+      border: 2px dashed rgba(31,224,165,0.32);
+      border-radius: 18px;
+      background: rgba(31,224,165,0.05);
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+
+    .dropzone:hover,
+    .dropzone.drag {
+      border-color: var(--accent);
+      background: rgba(31,224,165,0.08);
+    }
+
+    select,
+    button {
+      background: var(--panel-2);
+      color: var(--text);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 11px 14px;
+      font-size: 0.95rem;
+    }
+
+    button {
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .primary {
+      background: var(--accent);
+      color: #08120f;
+      border-color: transparent;
+    }
+
+    .workspace {
+      padding: 20px;
+      display: none;
+    }
+
+    .progress-row {
+      display: grid;
+      grid-template-columns: 1fr 80px;
+      gap: 14px;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .progress-track {
+      height: 8px;
+      border-radius: 999px;
+      background: #0b1320;
+      overflow: hidden;
+      border: 1px solid var(--line);
+    }
+
+    .progress-fill {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      transition: width 0.25s ease;
+    }
+
+    .progress-pct {
+      text-align: right;
+      color: var(--accent);
+      font-weight: 800;
+    }
+
+    .status-text {
+      color: var(--muted);
+      margin-bottom: 18px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      overflow: hidden;
+      background: var(--panel-2);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .card-title {
+      font-weight: 800;
+    }
+
+    .badge {
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--muted);
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.05);
+    }
+
+    .card-body {
+      padding: 16px;
+    }
+
+    canvas {
+      width: 100%;
+      display: block;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: #0a111b;
+    }
+
+    .viewer-wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16/9;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      overflow: hidden;
+      background: #0a111b;
+      cursor: grab;
+    }
+
+    .viewer-wrap:active { cursor: grabbing; }
+
+    #viewerCanvas {
+      width: 100%;
+      height: 100%;
+      border: none;
+      border-radius: 0;
+    }
+
+    .hint,
+    .small-note {
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.6;
+      margin-top: 10px;
+    }
+
+    .row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+
+    .toggle.active {
+      background: rgba(31,224,165,0.12);
+      color: var(--accent);
+      border-color: rgba(31,224,165,0.3);
+    }
+
+    .price {
+      font-size: 1.9rem;
+      color: var(--accent);
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+
+    .tags {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+
+    .tags span {
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      border: 1px solid var(--line);
+      color: var(--muted);
+      background: rgba(255,255,255,0.05);
+    }
+
+    .description {
+      min-height: 220px;
+      padding: 14px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: #0c1420;
+      white-space: pre-wrap;
+      line-height: 1.75;
+    }
+
+    .footer-note {
+      margin-top: 18px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: rgba(31,224,165,0.07);
+      border: 1px solid rgba(31,224,165,0.16);
+      color: #cbfff0;
+      line-height: 1.65;
+    }
+
+    .hidden-input {
+      display: none;
+    }
+
+    @media (max-width: 920px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand">Auto<span>Listing</span> AI</div>
+      <div class="pill">GitHub Pages Ready</div>
+    </header>
+
+    <section class="hero">
+      <h1>Upload the car. <span>Fake the studio.</span></h1>
+      <p>
+        This is a single-file HTML demo you can upload directly to GitHub Pages. It creates a polished studio-style presentation,
+        hides or removes the number plate, simulates a rotatable 360-style display, and generates a strong vehicle description.
+      </p>
+      <div class="notice">
+        This version is fully static HTML, CSS, and JavaScript. That means it works on GitHub Pages, but it does not perform real AI car segmentation,
+        true number plate detection, or real 3D reconstruction. It is a strong front-end prototype for demonstration and portfolio use.
+      </div>
+
+      <div class="controls">
+        <select id="bgTheme">
+          <option value="studio">Studio Neon</option>
+          <option value="sunset">Sunset Glow</option>
+          <option value="night">Midnight Luxe</option>
+        </select>
+
+        <select id="plateMode">
+          <option value="censor">Censor Plate</option>
+          <option value="remove">Remove Plate</option>
+        </select>
+
+        <button id="chooseBtn">Choose Image</button>
+        <button id="processBtn" class="primary">Process</button>
+      </div>
+
+      <label id="dropzone" class="dropzone">
+        Drag and drop a car photo here, or click Choose Image.
+        <input id="fileInput" class="hidden-input" type="file" accept="image/*" />
+      </label>
+    </section>
+
+    <section id="workspace" class="workspace">
+      <div class="progress-row">
+        <div class="progress-track"><div id="progressFill" class="progress-fill"></div></div>
+        <div id="progressPct" class="progress-pct">0%</div>
+      </div>
+      <div id="statusText" class="status-text">Waiting for upload...</div>
+
+      <div class="grid">
+        <article class="card">
+          <div class="card-header">
+            <div class="card-title">Studio Output</div>
+            <div class="badge">Preview</div>
+          </div>
+          <div class="card-body">
+            <canvas id="studioCanvas" width="1280" height="820"></canvas>
+            <div class="row">
+              <button class="toggle active bg-toggle" data-bg="studio">Studio</button>
+              <button class="toggle bg-toggle" data-bg="sunset">Sunset</button>
+              <button class="toggle bg-toggle" data-bg="night">Night</button>
+            </div>
+            <div class="small-note">Creates a cool studio-style scene and visually makes the car stand out more.</div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-header">
+            <div class="card-title">Protected Output</div>
+            <div class="badge">Number Plate</div>
+          </div>
+          <div class="card-body">
+            <canvas id="plateCanvas" width="1280" height="820"></canvas>
+            <div class="row">
+              <button id="censorBtn" class="toggle active">Censor</button>
+              <button id="removeBtn" class="toggle">Remove</button>
+            </div>
+            <div class="small-note">Censor adds a privacy block. Remove paints the area into the bumper for a cleaner mock listing look.</div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-header">
+            <div class="card-title">360-Style Viewer</div>
+            <div class="badge">Interactive</div>
+          </div>
+          <div class="card-body">
+            <div id="viewerWrap" class="viewer-wrap">
+              <canvas id="viewerCanvas" width="1280" height="720"></canvas>
+            </div>
+            <div class="hint">Drag left and right to simulate a rotating turntable effect.</div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-header">
+            <div class="card-title">Vehicle Description</div>
+            <div class="badge">Auto Generated</div>
+          </div>
+          <div class="card-body">
+            <div id="price" class="price">$0</div>
+            <div id="tags" class="tags"></div>
+            <div id="description" class="description"></div>
+          </div>
+        </article>
+      </div>
+
+      <div class="footer-note">
+        For a real version later, you would replace the mock cutout and mock plate area with a backend model such as car segmentation, number plate detection,
+        and image-to-3D generation. This file is designed to be easy to host and demo in GitHub.
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const fileInput = document.getElementById('fileInput');
+    const chooseBtn = document.getElementById('chooseBtn');
+    const processBtn = document.getElementById('processBtn');
+    const dropzone = document.getElementById('dropzone');
+    const workspace = document.getElementById('workspace');
+    const bgTheme = document.getElementById('bgTheme');
+    const plateMode = document.getElementById('plateMode');
+    const progressFill = document.getElementById('progressFill');
+    const progressPct = document.getElementById('progressPct');
+    const statusText = document.getElementById('statusText');
+    const studioCanvas = document.getElementById('studioCanvas');
+    const plateCanvas = document.getElementById('plateCanvas');
+    const viewerCanvas = document.getElementById('viewerCanvas');
+    const priceEl = document.getElementById('price');
+    const tagsEl = document.getElementById('tags');
+    const descriptionEl = document.getElementById('description');
+    const viewerWrap = document.getElementById('viewerWrap');
+    const censorBtn = document.getElementById('censorBtn');
+    const removeBtn = document.getElementById('removeBtn');
+
+    let selectedFile = null;
+    let originalImage = null;
+    let currentBg = 'studio';
+    let currentPlate = 'censor';
+    let viewerAngle = 0;
+    let dragging = false;
+    let lastX = 0;
+
+    const studioCtx = studioCanvas.getContext('2d');
+    const plateCtx = plateCanvas.getContext('2d');
+    const viewerCtx = viewerCanvas.getContext('2d');
+
+    function setProgress(value, text) {
+      progressFill.style.width = value + '%';
+      progressPct.textContent = Math.round(value) + '%';
+      statusText.textContent = text;
+    }
+
+    function readFileAsImage(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = event => {
+          const img = new Image();
+          img.onload = () => resolve(img);
+          img.onerror = reject;
+          img.src = event.target.result;
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function wait(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    function setCanvasSize(canvas, ratio = 0.64) {
+      const width = 1280;
+      const height = Math.round(width * ratio);
+      canvas.width = width;
+      canvas.height = height;
+    }
+
+    function drawBackgroundScene(ctx, w, h, theme) {
+      let top, mid, bottom;
+
+      if (theme === 'sunset') {
+        top = [90, 42, 106];
+        mid = [255, 126, 76];
+        bottom = [29, 24, 38];
+      } else if (theme === 'night') {
+        top = [8, 18, 34];
+        mid = [15, 45, 74];
+        bottom = [5, 8, 14];
+      } else {
+        top = [15, 28, 52];
+        mid = [28, 58, 102];
+        bottom = [8, 12, 18];
+      }
+
+      const g = ctx.createLinearGradient(0, 0, 0, h);
+      g.addColorStop(0, `rgb(${top[0]},${top[1]},${top[2]})`);
+      g.addColorStop(0.45, `rgb(${mid[0]},${mid[1]},${mid[2]})`);
+      g.addColorStop(1, `rgb(${bottom[0]},${bottom[1]},${bottom[2]})`);
+      ctx.fillStyle = g;
+      ctx.fillRect(0, 0, w, h);
+
+      const floor = ctx.createRadialGradient(w / 2, h * 0.84, 10, w / 2, h * 0.84, w * 0.35);
+      floor.addColorStop(0, 'rgba(255,255,255,0.20)');
+      floor.addColorStop(1, 'rgba(255,255,255,0)');
+      ctx.fillStyle = floor;
+      ctx.beginPath();
+      ctx.ellipse(w / 2, h * 0.84, w * 0.34, h * 0.07, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      const glow = ctx.createRadialGradient(w / 2, h * 0.36, 0, w / 2, h * 0.36, w * 0.42);
+      if (theme === 'sunset') {
+        glow.addColorStop(0, 'rgba(255, 208, 120, 0.30)');
+      } else if (theme === 'night') {
+        glow.addColorStop(0, 'rgba(80, 255, 220, 0.22)');
+      } else {
+        glow.addColorStop(0, 'rgba(90, 190, 255, 0.20)');
+      }
+      glow.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle = glow;
+      ctx.fillRect(0, 0, w, h);
+    }
+
+    function drawCarCutoutMock(ctx, img, w, h, angleFactor = 0) {
+      const scale = Math.min((w * 0.74) / img.width, (h * 0.56) / img.height);
+      const drawW = img.width * scale;
+      const drawH = img.height * scale;
+      const x = (w - drawW) / 2;
+      const y = h * 0.2;
+
+      ctx.save();
+      ctx.beginPath();
+      const padX = drawW * 0.06;
+      const padY = drawH * 0.05;
+      ctx.roundRect(x + padX, y + padY, drawW - padX * 2, drawH - padY * 2, 34);
+      ctx.clip();
+
+      ctx.filter = 'contrast(1.16) saturate(1.10) brightness(1.04)';
+      ctx.drawImage(img, x, y, drawW, drawH);
+      ctx.restore();
+
+      ctx.save();
+      ctx.globalAlpha = 0.16;
+      ctx.filter = 'blur(18px)';
+      ctx.drawImage(img, x - 10, y - 6, drawW + 20, drawH + 12);
+      ctx.restore();
+
+      const edge = ctx.createLinearGradient(x, y, x + drawW, y + drawH);
+      edge.addColorStop(0, 'rgba(255,255,255,0.14)');
+      edge.addColorStop(0.5, 'rgba(255,255,255,0)');
+      edge.addColorStop(1, 'rgba(31,224,165,0.10)');
+      ctx.fillStyle = edge;
+      ctx.fillRect(x, y, drawW, drawH);
+
+      if (angleFactor !== 0) {
+        ctx.save();
+        ctx.globalAlpha = 0.08;
+        ctx.fillStyle = angleFactor > 0 ? '#7ef8d8' : '#9fd5ff';
+        ctx.fillRect(x + (angleFactor > 0 ? 0 : drawW * 0.6), y, drawW * 0.4, drawH);
+        ctx.restore();
+      }
+
+      return { x, y, w: drawW, h: drawH };
+    }
+
+    function drawStudioOutput() {
+      setCanvasSize(studioCanvas);
+      const w = studioCanvas.width;
+      const h = studioCanvas.height;
+      studioCtx.clearRect(0, 0, w, h);
+      drawBackgroundScene(studioCtx, w, h, currentBg);
+
+      const shadow = studioCtx.createRadialGradient(w / 2, h * 0.82, 0, w / 2, h * 0.82, w * 0.26);
+      shadow.addColorStop(0, 'rgba(0,0,0,0.42)');
+      shadow.addColorStop(1, 'rgba(0,0,0,0)');
+      studioCtx.beginPath();
+      studioCtx.ellipse(w / 2, h * 0.82, w * 0.23, h * 0.055, 0, 0, Math.PI * 2);
+      studioCtx.fillStyle = shadow;
+      studioCtx.fill();
+
+      drawCarCutoutMock(studioCtx, originalImage, w, h, 0);
+    }
+
+    function drawPlateOutput() {
+      setCanvasSize(plateCanvas);
+      const w = plateCanvas.width;
+      const h = plateCanvas.height;
+      plateCtx.clearRect(0, 0, w, h);
+      drawBackgroundScene(plateCtx, w, h, currentBg);
+      drawCarCutoutMock(plateCtx, originalImage, w, h, 0);
+
+      const x1 = w * 0.43;
+      const y1 = h * 0.61;
+      const x2 = w * 0.57;
+      const y2 = h * 0.67;
+      const ww = x2 - x1;
+      const hh = y2 - y1;
+
+      plateCtx.beginPath();
+      plateCtx.roundRect(x1, y1, ww, hh, 12);
+
+      if (currentPlate === 'remove') {
+        const g = plateCtx.createLinearGradient(x1, y1, x1, y2);
+        g.addColorStop(0, 'rgba(104,104,108,0.96)');
+        g.addColorStop(1, 'rgba(72,72,75,0.96)');
+        plateCtx.fillStyle = g;
+        plateCtx.fill();
+        plateCtx.strokeStyle = 'rgba(255,255,255,0.12)';
+        plateCtx.lineWidth = 2;
+        plateCtx.stroke();
+        plateCtx.fillStyle = 'rgba(255,255,255,0.08)';
+        plateCtx.beginPath();
+        plateCtx.roundRect(x1 + ww * 0.14, y1 + hh * 0.18, ww * 0.72, hh * 0.18, 6);
+        plateCtx.fill();
+      } else {
+        plateCtx.fillStyle = 'rgba(10,14,18,0.94)';
+        plateCtx.fill();
+        plateCtx.strokeStyle = 'rgba(31,224,165,0.34)';
+        plateCtx.lineWidth = 2;
+        plateCtx.stroke();
+        plateCtx.fillStyle = '#1fe0a5';
+        plateCtx.font = 'bold 26px Arial';
+        plateCtx.textAlign = 'center';
+        plateCtx.textBaseline = 'middle';
+        plateCtx.fillText('PLATE HIDDEN', x1 + ww / 2, y1 + hh / 2 + 1);
+      }
+    }
+
+    function drawViewer() {
+      viewerCanvas.width = 1280;
+      viewerCanvas.height = 720;
+      const w = viewerCanvas.width;
+      const h = viewerCanvas.height;
+      viewerCtx.clearRect(0, 0, w, h);
+
+      drawBackgroundScene(viewerCtx, w, h, currentBg);
+
+      const shadow = viewerCtx.createRadialGradient(w / 2, h * 0.82, 0, w / 2, h * 0.82, w * 0.24);
+      shadow.addColorStop(0, 'rgba(0,0,0,0.4)');
+      shadow.addColorStop(1, 'rgba(0,0,0,0)');
+      viewerCtx.beginPath();
+      viewerCtx.ellipse(w / 2, h * 0.82, w * 0.21, h * 0.055, 0, 0, Math.PI * 2);
+      viewerCtx.fillStyle = shadow;
+      viewerCtx.fill();
+
+      const radians = viewerAngle * Math.PI / 180;
+      const sideScale = 0.42 + Math.abs(Math.cos(radians)) * 0.5;
+      const angleFactor = Math.sin(radians);
+
+      viewerCtx.save();
+      if (Math.cos(radians) < 0) {
+        viewerCtx.translate(w, 0);
+        viewerCtx.scale(-1, 1);
+      }
+
+      const baseScale = Math.min((w * 0.78) / originalImage.width, (h * 0.56) / originalImage.height);
+      const drawW = originalImage.width * baseScale * sideScale;
+      const drawH = originalImage.height * baseScale * 0.9;
+      const x = (w - drawW) / 2;
+      const y = h * 0.18;
+
+      viewerCtx.beginPath();
+      viewerCtx.roundRect(x + drawW * 0.06, y + drawH * 0.05, drawW * 0.88, drawH * 0.88, 32);
+      viewerCtx.clip();
+      viewerCtx.filter = 'contrast(1.16) saturate(1.10) brightness(1.05)';
+      viewerCtx.drawImage(originalImage, x, y, drawW, drawH);
+      viewerCtx.restore();
+
+      viewerCtx.save();
+      viewerCtx.globalAlpha = 0.10;
+      viewerCtx.fillStyle = angleFactor > 0 ? '#7ef8d8' : '#9fd5ff';
+      viewerCtx.fillRect(w * 0.32 + (angleFactor > 0 ? -20 : 90), h * 0.2, w * 0.18, h * 0.42);
+      viewerCtx.restore();
+
+      if (currentPlate === 'censor') {
+        const x1 = w * 0.43;
+        const y1 = h * 0.60;
+        const ww = w * 0.14;
+        const hh = h * 0.06;
+        viewerCtx.beginPath();
+        viewerCtx.roundRect(x1, y1, ww, hh, 10);
+        viewerCtx.fillStyle = 'rgba(10,14,18,0.92)';
+        viewerCtx.fill();
+      }
+    }
+
+    function generateDescription() {
+      const makes = ['Toyota', 'Honda', 'Mazda', 'Ford', 'BMW', 'Hyundai', 'Nissan'];
+      const models = ['Camry', 'Civic', 'CX-5', 'Ranger', '320i', 'Tucson', 'X-Trail'];
+      const colours = ['Pearl White', 'Jet Black', 'Graphite Grey', 'Deep Blue', 'Metallic Red'];
+      const bodies = ['Sedan', 'SUV', 'Hatchback', 'Ute'];
+      const engines = ['2.0L petrol', '2.5L petrol', 'hybrid powertrain', '2.2L turbo diesel'];
+      const drives = ['FWD', 'RWD', 'AWD'];
+      const transmissions = ['automatic', 'manual', 'CVT automatic'];
+
+      const year = [2019, 2020, 2021, 2022, 2023, 2024][Math.floor(Math.random() * 6)];
+      const make = makes[Math.floor(Math.random() * makes.length)];
+      const model = models[Math.floor(Math.random() * models.length)];
+      const colour = colours[Math.floor(Math.random() * colours.length)];
+      const body = bodies[Math.floor(Math.random() * bodies.length)];
+      const engine = engines[Math.floor(Math.random() * engines.length)];
+      const drive = drives[Math.floor(Math.random() * drives.length)];
+      const transmission = transmissions[Math.floor(Math.random() * transmissions.length)];
+      const kms = (Math.floor(Math.random() * 80) + 18) * 1000;
+      const seats = [4, 5, 7][Math.floor(Math.random() * 3)];
+      const price = (Math.floor(Math.random() * 42) + 18) * 1000;
+
+      priceEl.textContent = '$' + price.toLocaleString();
+      tagsEl.innerHTML = [
+        year, make, model, colour, body, engine, transmission, drive, kms.toLocaleString() + ' km', seats + ' seats'
+      ].map(tag => `<span>${tag}</span>`).join('');
+
+      descriptionEl.textContent = `${year} ${make} ${model} presented in ${colour.toLowerCase()} with a sharp overall look and strong road presence.
+
+This ${body.toLowerCase()} is paired with ${engine}, ${transmission}, and a ${drive} setup, making it a solid option for buyers who want something practical, appealing, and ready to advertise.
+
+Highlights include:
+- Approx. ${kms.toLocaleString()} km travelled
+- ${seats} seat configuration
+- Studio-style presentation for listing photos
+- Number plate protected for privacy
+- Clean, polished visual output designed to catch attention online
+
+This advert has been prepared to make the vehicle stand out more strongly in a marketplace setting. Serious enquiries welcome.`;
+    }
+
+    function renderAll() {
+      drawStudioOutput();
+      drawPlateOutput();
+      drawViewer();
+      generateDescription();
+    }
+
+    chooseBtn.addEventListener('click', () => fileInput.click());
+
+    dropzone.addEventListener('dragover', e => {
+      e.preventDefault();
+      dropzone.classList.add('drag');
+    });
+
+    dropzone.addEventListener('dragleave', () => {
+      dropzone.classList.remove('drag');
+    });
+
+    dropzone.addEventListener('drop', e => {
+      e.preventDefault();
+      dropzone.classList.remove('drag');
+      selectedFile = e.dataTransfer.files[0] || null;
+      fileInput.files = e.dataTransfer.files;
+    });
+
+    fileInput.addEventListener('change', e => {
+      selectedFile = e.target.files[0] || null;
+    });
+
+    processBtn.addEventListener('click', async () => {
+      if (!selectedFile) {
+        alert('Please choose an image first.');
+        return;
+      }
+
+      workspace.style.display = 'block';
+      setProgress(10, 'Reading image...');
+      originalImage = await readFileAsImage(selectedFile);
+
+      currentBg = bgTheme.value;
+      currentPlate = plateMode.value;
+      syncButtons();
+
+      await wait(250);
+      setProgress(35, 'Building studio scene...');
+      await wait(250);
+      setProgress(65, 'Applying number plate privacy...');
+      await wait(250);
+      setProgress(85, 'Generating description and viewer...');
+      renderAll();
+      setProgress(100, 'Done.');
+    });
+
+    function syncButtons() {
+      document.querySelectorAll('.bg-toggle').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.bg === currentBg);
+      });
+      censorBtn.classList.toggle('active', currentPlate === 'censor');
+      removeBtn.classList.toggle('active', currentPlate === 'remove');
+    }
+
+    document.querySelectorAll('.bg-toggle').forEach(btn => {
+      btn.addEventListener('click', () => {
+        currentBg = btn.dataset.bg;
+        bgTheme.value = currentBg;
+        syncButtons();
+        if (originalImage) {
+          drawStudioOutput();
+          drawPlateOutput();
+          drawViewer();
+        }
+      });
+    });
+
+    censorBtn.addEventListener('click', () => {
+      currentPlate = 'censor';
+      plateMode.value = 'censor';
+      syncButtons();
+      if (originalImage) {
+        drawPlateOutput();
+        drawViewer();
+      }
+    });
+
+    removeBtn.addEventListener('click', () => {
+      currentPlate = 'remove';
+      plateMode.value = 'remove';
+      syncButtons();
+      if (originalImage) {
+        drawPlateOutput();
+        drawViewer();
+      }
+    });
+
+    viewerWrap.addEventListener('mousedown', e => {
+      dragging = true;
+      lastX = e.clientX;
+    });
+
+    window.addEventListener('mousemove', e => {
+      if (!dragging || !originalImage) return;
+      viewerAngle += (e.clientX - lastX) * 0.55;
+      lastX = e.clientX;
+      drawViewer();
+    });
+
+    window.addEventListener('mouseup', () => {
+      dragging = false;
+    });
+  </script>
+</body>
+</html>

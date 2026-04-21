@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>AutoListing AI — Car Image Processor</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#07090F;--bg2:#0C0F18;--bg3:#111520;
+  --surface:#161B28;--surface2:#1D2336;--surface3:#242C42;
+  --border:rgba(255,255,255,0.06);--border2:rgba(255,255,255,0.11);
+  --accent:#00E5A0;--accent2:#00FFB2;--accent-dim:rgba(0,229,160,0.08);
+  --warn:#FFB800;--red:#FF4D6A;--blue:#4D9EFF;--purple:#A78BFA;
+  --text:#ECEEF5;--text2:#7A8398;--text3:#3D4558;
+  --font:'Syne',sans-serif;--mono:'JetBrains Mono',monospace;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:15px;line-height:1.6;min-height:100vh;overflow-x:hidden}
+::-webkit-scrollbar{width:3px}::-webkit-scrollbar-thumb{background:var(--accent);border-radius:2px}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:200;height:62px;display:flex;align-items:center;justify-content:space-between;padding:0 48px;background:rgba(7,9,15,0.92);backdrop-filter:blur(24px);border-bottom:0.5px solid var(--border)}
+.logo{font-size:17px;font-weight:800;letter-spacing:-0.5px}.logo span{color:var(--accent)}
+.nav-pill{font-family:var(--mono);font-size:10px;letter-spacing:1.5px;color:var(--accent);background:var(--accent-dim);border:0.5px solid rgba(0,229,160,0.3);padding:4px 12px;border-radius:100px}
+.reset-btn{display:none;background:var(--surface);border:0.5px solid var(--border2);color:var(--text2);padding:8px 20px;border-radius:8px;font-family:var(--font);font-size:13px;font-weight:700;cursor:pointer;transition:all 0.2s}
+.reset-btn:hover{border-color:var(--border2);color:var(--text)}.reset-btn.show{display:inline-block}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:100px 32px 60px;position:relative;overflow:hidden}
+.hero-dots{position:absolute;inset:0;background-image:radial-gradient(rgba(0,229,160,0.06) 1px,transparent 1px);background-size:32px 32px;pointer-events:none}
+.hero-radial{position:absolute;top:25%;left:50%;transform:translateX(-50%);width:700px;height:500px;background:radial-gradient(ellipse,rgba(0,229,160,0.05) 0%,transparent 65%);pointer-events:none}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:2.5px;color:var(--accent);margin-bottom:20px;animation:fadeUp 0.7s 0.1s both}
+h1{font-size:clamp(44px,7vw,96px);font-weight:800;line-height:0.95;letter-spacing:-3px;margin-bottom:28px;animation:fadeUp 0.7s 0.2s both}
+h1 em{font-style:normal;color:var(--accent)}h1 .dim{color:var(--text3)}
+.hero-sub{font-size:17px;color:var(--text2);max-width:520px;line-height:1.75;margin-bottom:48px;animation:fadeUp 0.7s 0.3s both}
+.upload-zone{width:100%;max-width:600px;border:1.5px dashed rgba(0,229,160,0.3);border-radius:18px;padding:48px 32px;cursor:pointer;transition:all 0.3s;background:rgba(0,229,160,0.02);animation:fadeUp 0.7s 0.4s both}
+.upload-zone:hover,.upload-zone.drag{border-color:var(--accent);background:var(--accent-dim)}
+.uicon{width:64px;height:64px;border-radius:16px;background:var(--surface2);border:0.5px solid var(--border2);display:flex;align-items:center;justify-content:center;margin:0 auto 20px}
+.uicon svg{width:26px;height:26px;stroke:var(--accent);fill:none;stroke-width:1.5}
+.utitle{font-size:20px;font-weight:800;letter-spacing:-0.5px;margin-bottom:8px}
+.usub{font-size:13px;color:var(--text2);margin-bottom:24px}
+.ucta{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#04070D;padding:11px 28px;border-radius:8px;font-size:14px;font-weight:700;border:none;cursor:pointer;font-family:var(--font);transition:all 0.2s}
+.ucta:hover{background:var(--accent2)}
+#file-input{display:none}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+/* PROCESSING */
+#proc-screen{display:none;padding-top:62px}
+.topbar{background:var(--bg2);border-bottom:0.5px solid var(--border);padding:18px 48px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.fname{font-family:var(--mono);font-size:12px;color:var(--text2);background:var(--surface);padding:5px 12px;border-radius:6px;border:0.5px solid var(--border2)}
+.status-pill{font-family:var(--mono);font-size:11px;padding:4px 14px;border-radius:100px;display:flex;align-items:center;gap:6px}
+.status-pill.running{color:var(--warn);background:rgba(255,184,0,0.1);border:0.5px solid rgba(255,184,0,0.25)}
+.status-pill.done{color:var(--accent);background:var(--accent-dim);border:0.5px solid rgba(0,229,160,0.25)}
+.pbar-wrap{flex:1;background:var(--surface2);border-radius:100px;height:4px;overflow:hidden;min-width:100px}
+.pbar{height:100%;background:var(--accent);border-radius:100px;width:0%;transition:width 0.35s ease}
+.ppct{font-family:var(--mono);font-size:12px;color:var(--accent);min-width:36px}
+.pdot{width:7px;height:7px;border-radius:50%;background:currentColor;animation:pd 1.2s infinite}
+@keyframes pd{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.3;transform:scale(0.6)}}
+
+/* GRID */
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;padding:24px 48px 40px}
+.card{background:var(--surface);border:0.5px solid var(--border2);border-radius:16px;overflow:hidden;transition:border-color 0.3s}
+.card.ready{border-color:rgba(0,229,160,0.25)}
+.card-hdr{padding:14px 18px;border-bottom:0.5px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.card-title{font-size:13px;font-weight:700;display:flex;align-items:center;gap:8px}
+.cicon{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.badge{font-family:var(--mono);font-size:9px;letter-spacing:1px;padding:3px 10px;border-radius:100px}
+.bwait{color:var(--text3);background:var(--surface3)}
+.brun{color:var(--warn);background:rgba(255,184,0,0.1);border:0.5px solid rgba(255,184,0,0.2)}
+.bdone{color:var(--accent);background:var(--accent-dim);border:0.5px solid rgba(0,229,160,0.2)}
+.card-body{padding:14px;min-height:280px;position:relative;display:flex;flex-direction:column}
+
+.loading{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;background:var(--surface);border-radius:0 0 16px 16px}
+.spin{width:34px;height:34px;border:2.5px solid var(--surface3);border-top-color:var(--accent);border-radius:50%;animation:spin 0.7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.ltext{font-family:var(--mono);font-size:11px;color:var(--text2)}
+.lsub{font-size:11px;color:var(--text3)}
+
+.checker{flex:1;border-radius:10px;overflow:hidden;background:repeating-conic-gradient(#1B2130 0% 25%,#141924 0% 50%) 0 0/14px 14px;min-height:200px;display:flex;align-items:center;justify-content:center}
+.checker canvas,.checker img{width:100%;height:100%;object-fit:contain;display:block}
+.dark-bg{flex:1;border-radius:10px;overflow:hidden;background:var(--bg3);min-height:200px;position:relative}
+.dark-bg canvas{width:100%;height:100%;display:block}
+
+.dlrow{display:flex;gap:8px;margin-top:10px}
+.dlbtn{flex:1;background:var(--surface2);border:0.5px solid var(--border2);color:var(--text2);padding:8px;border-radius:8px;font-family:var(--font);font-size:12px;font-weight:700;cursor:pointer;transition:all 0.2s;text-align:center}
+.dlbtn:hover{border-color:var(--accent);color:var(--accent)}
+.dlbtn.p{background:var(--accent);color:#04070D;border-color:var(--accent)}
+.dlbtn.p:hover{background:var(--accent2)}
+
+/* 3D viewer */
+.v3d{flex:1;border-radius:10px;overflow:hidden;background:var(--bg3);cursor:grab;min-height:220px;position:relative}
+.v3d:active{cursor:grabbing}
+.v3d canvas{width:100%;height:100%;display:block}
+.v3d-hint{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);font-family:var(--mono);font-size:9px;color:var(--accent);background:rgba(7,9,15,0.8);padding:3px 12px;border-radius:100px;white-space:nowrap;pointer-events:none}
+.v3d-btns{display:flex;gap:6px;margin-top:8px}
+.vbtn{flex:1;background:var(--surface2);border:0.5px solid var(--border2);border-radius:6px;padding:6px;font-family:var(--font);font-size:11px;font-weight:700;color:var(--text2);cursor:pointer;transition:all 0.2s;text-align:center}
+.vbtn.on,.vbtn:hover{background:var(--accent-dim);border-color:rgba(0,229,160,0.3);color:var(--accent)}
+
+/* desc card */
+.dprice{font-family:var(--mono);font-size:26px;font-weight:700;color:var(--accent);letter-spacing:-1px;margin-bottom:8px}
+.dtags{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px}
+.dtag{font-size:10px;padding:3px 9px;border-radius:5px;background:var(--surface2);border:0.5px solid var(--border2);color:var(--text2)}
+.dtag.a{border-color:rgba(0,229,160,0.3);color:var(--accent);background:var(--accent-dim)}
+.dtext{font-size:12px;color:var(--text2);line-height:1.85;background:var(--bg2);border-radius:8px;padding:12px;border:0.5px solid var(--border);flex:1;font-family:var(--mono);white-space:pre-wrap;overflow-y:auto;max-height:220px}
+
+/* publish */
+.pub-bar{margin:0 48px 48px;background:var(--surface);border:0.5px solid var(--border2);border-radius:16px;padding:24px 28px;display:none}
+.pub-bar.show{display:block}
+.pub-title{font-size:15px;font-weight:800;margin-bottom:14px}
+.pub-platforms{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.plat{padding:9px 16px;background:var(--surface2);border:0.5px solid var(--border2);border-radius:8px;cursor:pointer;font-size:13px;font-weight:700;transition:all 0.2s}
+.plat.on{border-color:rgba(0,229,160,0.4);background:var(--accent-dim);color:var(--accent)}
+.pbtn{background:var(--accent);color:#04070D;border:none;padding:11px 32px;border-radius:8px;font-family:var(--font);font-size:14px;font-weight:700;cursor:pointer;transition:all 0.2s}
+.pbtn:hover{background:var(--accent2)}
+.pub-log{font-family:var(--mono);font-size:11px;color:var(--text2);margin-top:12px;line-height:2;display:none}
+.pok{color:var(--accent)}
+.success{display:none;margin-top:12px;background:var(--accent-dim);border:0.5px solid rgba(0,229,160,0.3);border-radius:10px;padding:16px 20px;font-size:14px;font-weight:700;color:var(--accent)}
+.success.show{display:block}
+
+@media(max-width:900px){
+  nav{padding:0 20px}.grid{grid-template-columns:1fr;padding:16px 20px 40px}
+  .topbar{padding:12px 20px}.pub-bar{margin:0 20px 40px}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">Auto<span>Listing</span> AI</div>
+  <div style="display:flex;align-items:center;gap:10px">
+    <div class="nav-pill">AI PIPELINE</div>
+    <button class="reset-btn" id="rbtn" onclick="resetAll()">↺ New Image</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div id="hero">
+  <div class="hero">
+    <div class="hero-dots"></div><div class="hero-radial"></div>
+    <div class="eyebrow">END-TO-END AI CAR PROCESSOR</div>
+    <h1>Upload Once.<br/><em>Get Everything.</em><br/><span class="dim">Instantly.</span></h1>
+    <p class="hero-sub">Drop one car photo. All four outputs — studio background, 3D viewer, plate hidden with mascot, and AI sales listing — process simultaneously.</p>
+    <div class="upload-zone" id="uz" ondragover="dOver(event)" ondragleave="dLeave()" ondrop="dDrop(event)" onclick="document.getElementById('file-input').click()">
+      <div class="uicon"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
+      <div class="utitle">Drop your car photo here</div>
+      <div class="usub">JPG · PNG · WEBP · Your actual car image is processed locally</div>
+      <button class="ucta" onclick="event.stopPropagation();document.getElementById('file-input').click()">Choose Image</button>
+      <input type="file" id="file-input" accept="image/*" onchange="go(this.files[0])"/>
+    </div>
+  </div>
+</div>
+
+<!-- PROCESSING SCREEN -->
+<div id="proc-screen">
+  <div class="topbar">
+    <div class="fname" id="fname">—</div>
+    <div class="status-pill running" id="spill"><div class="pdot"></div><span id="stxt">Processing all outputs...</span></div>
+    <div class="pbar-wrap"><div class="pbar" id="pbar"></div></div>
+    <div class="ppct" id="ppct">0%</div>
+  </div>
+
+  <div class="grid">
+    <!-- BG REMOVAL -->
+    <div class="card" id="c-bg">
+      <div class="card-hdr">
+        <div class="card-title"><div class="cicon" style="background:rgba(0,229,160,0.1)">🎨</div>Studio Background — Your Car</div>
+        <div class="badge bwait" id="b-bg">Waiting</div>
+      </div>
+      <div class="card-body">
+        <div class="loading" id="l-bg"><div class="spin"></div><div class="ltext" id="lt-bg">Removing background...</div><div class="lsub">Placing your car on studio white</div></div>
+        <div style="display:none;flex:1;flex-direction:column;gap:10px" id="r-bg">
+          <div class="checker"><canvas id="cv-bg"></canvas></div>
+          <div class="dlrow">
+            <button class="dlbtn p" onclick="dlCanvas('cv-bg','car-studio.jpg')">↓ Download</button>
+            <button class="dlbtn" onclick="cpCanvas('cv-bg')">⎘ Copy</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3D VIEWER -->
+    <div class="card" id="c-3d">
+      <div class="card-hdr">
+        <div class="card-title"><div class="cicon" style="background:rgba(77,158,255,0.12)">🔄</div>3D Enhanced View — Drag to Rotate</div>
+        <div class="badge bwait" id="b-3d">Waiting</div>
+      </div>
+      <div class="card-body">
+        <div class="loading" id="l-3d"><div class="spin" style="border-top-color:var(--blue)"></div><div class="ltext">Building 3D scene...</div><div class="lsub">Based on your actual car photo</div></div>
+        <div style="display:none;flex:1;flex-direction:column;gap:8px" id="r-3d">
+          <div class="v3d" id="v3d-wrap"><canvas id="cv-3d"></canvas><div class="v3d-hint">⟵ DRAG · SCROLL ZOOM · TILT ⟶</div></div>
+          <div class="v3d-btns">
+            <button class="vbtn on" onclick="sv('exterior',this)">360° Exterior</button>
+            <button class="vbtn" onclick="sv('interior',this)">Interior</button>
+            <button class="vbtn" onclick="sv('top',this)">Top Down</button>
+            <button class="vbtn" id="spinbtn" onclick="toggleSpin(this)">⟳ Auto Spin</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PLATE HIDDEN -->
+    <div class="card" id="c-plate">
+      <div class="card-hdr">
+        <div class="card-title"><div class="cicon" style="background:rgba(255,184,0,0.1)">🔒</div>Number Plate — Hidden with Mascot</div>
+        <div class="badge bwait" id="b-plate">Waiting</div>
+      </div>
+      <div class="card-body">
+        <div class="loading" id="l-plate"><div class="spin" style="border-top-color:var(--warn)"></div><div class="ltext" id="lt-plate">Detecting number plate...</div><div class="lsub">Replacing with animated character</div></div>
+        <div style="display:none;flex:1;flex-direction:column;gap:10px" id="r-plate">
+          <div class="dark-bg"><canvas id="cv-plate"></canvas></div>
+          <div style="font-family:var(--mono);font-size:11px;color:var(--warn);background:rgba(255,184,0,0.07);border:0.5px solid rgba(255,184,0,0.2);border-radius:8px;padding:9px 12px">✓ Plate detected · replaced with animated mascot · privacy protected</div>
+          <div class="dlrow"><button class="dlbtn p" onclick="dlCanvas('cv-plate','car-plate-hidden.jpg')">↓ Download</button></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LISTING -->
+    <div class="card" id="c-desc">
+      <div class="card-hdr">
+        <div class="card-title"><div class="cicon" style="background:rgba(167,139,250,0.12)">✍️</div>AI Sales Listing — Auto Generated</div>
+        <div class="badge bwait" id="b-desc">Waiting</div>
+      </div>
+      <div class="card-body">
+        <div class="loading" id="l-desc"><div class="spin" style="border-top-color:var(--purple)"></div><div class="ltext">Generating sales pitch...</div><div class="lsub">Psycho-linguistic AI copywriting</div></div>
+        <div style="display:none;flex:1;flex-direction:column;gap:8px" id="r-desc">
+          <div class="dprice" id="dprice">$0</div>
+          <div class="dtags" id="dtags"></div>
+          <div class="dtext" id="dtext"></div>
+          <div class="dlrow">
+            <button class="dlbtn p" onclick="cpDesc()">⎘ Copy Listing</button>
+            <button class="dlbtn" onclick="regenDesc()">↺ Regenerate</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PUBLISH -->
+  <div class="pub-bar" id="pbar-section">
+    <div class="pub-title">🚀 Publish to Marketplaces — Zero Human Intervention</div>
+    <div class="pub-platforms">
+      <div class="plat on" onclick="this.classList.toggle('on')">📘 Facebook Marketplace</div>
+      <div class="plat on" onclick="this.classList.toggle('on')">🚗 Carsales.com.au</div>
+      <div class="plat" onclick="this.classList.toggle('on')">🟠 Gumtree</div>
+      <div class="plat" onclick="this.classList.toggle('on')">🏷️ AutoTrader</div>
+    </div>
+    <button class="pbtn" onclick="publish()">🚀 Publish Now</button>
+    <div class="pub-log" id="pub-log"></div>
+    <div class="success" id="succ">🎉 Listing is LIVE! ID #<span id="lid">—</span> — Published by AutoListing AI with zero manual work.</div>
+  </div>
+</div>
+
+<canvas id="tmp" style="display:none"></canvas>
+
+<script>
+// ── STATE ──
+let srcImg=null, srcFile=null, bgData=null, v3dImg=null;
+let ang=0, tilt=0, zoom=1, mode='exterior';
+let dragging=false, lx=0, ly=0, autoSpin=false, spinTimer=null;
+let feats={}, gDesc='';
+
+// ── UPLOAD ──
+function dOver(e){e.preventDefault();document.getElementById('uz').classList.add('drag')}
+function dLeave(){document.getElementById('uz').classList.remove('drag')}
+function dDrop(e){e.preventDefault();dLeave();const f=e.dataTransfer.files[0];if(f&&f.type.startsWith('image/'))go(f)}
+
+function go(file){
+  if(!file)return;
+  srcFile=file;
+  document.getElementById('hero').style.display='none';
+  document.getElementById('proc-screen').style.display='block';
+  document.getElementById('fname').textContent=file.name;
+  document.getElementById('rbtn').classList.add('show');
+  window.scrollTo({top:0});
+  const r=new FileReader();
+  r.onload=e=>{const i=new Image();i.onload=()=>{srcImg=i;runAll()};i.src=e.target.result};
+  r.readAsDataURL(file);
+}
+
+// ── MAIN ──
+async function runAll(){
+  setP(0);
+  await Promise.all([doBG(), doPlate(), doDesc()]);
+  setP(100);
+  const sp=document.getElementById('spill');
+  sp.className='status-pill done';
+  sp.innerHTML='<div class="pdot"></div><span>All Done ✓</span>';
+  document.getElementById('pbar-section').classList.add('show');
+}
+
+const wait=ms=>new Promise(r=>setTimeout(r,ms));
+
+function setP(v){
+  document.getElementById('pbar').style.width=v+'%';
+  document.getElementById('ppct').textContent=Math.round(v)+'%';
+}
+function animP(from,to,ms){
+  return new Promise(res=>{
+    const s=performance.now();
+    function t(now){
+      const p=Math.min((now-s)/ms,1);
+      const val=from+(to-from)*p;
+      const cur=parseFloat(document.getElementById('pbar').style.width)||0;
+      if(val>cur){document.getElementById('pbar').style.width=val+'%';document.getElementById('ppct').textContent=Math.round(val)+'%';}
+      if(p<1)requestAnimationFrame(t);else res();
+    }
+    requestAnimationFrame(t);
+  });
+}
+function setBadge(id,cls,txt){
+  const el=document.getElementById('b-'+id);
+  el.className='badge '+cls; el.textContent=txt;
+}
+function ltxt(id,t){const e=document.getElementById('lt-'+id);if(e)e.textContent=t;}
+function showResult(id){
+  document.getElementById('l-'+id).style.display='none';
+  const r=document.getElementById('r-'+id);
+  r.style.display='flex'; r.style.flexDirection='column';
+  document.getElementById('c-'+id).classList.add('ready');
+}
+
+// ── 1. BACKGROUND REMOVAL ──
+async function doBG(){
+  setBadge('bg','brun','Running');
+  ltxt('bg','Analysing edges...');
+  await animP(0,10,600);
+  const img=srcImg;
+  const cv=document.getElementById('cv-bg');
+  const W=Math.min(img.naturalWidth,1100),H=Math.round(img.naturalHeight*(W/img.naturalWidth));
+  const SW=W+80,SH=H+70;
+  cv.width=SW; cv.height=SH;
+  const ctx=cv.getContext('2d');
+  ltxt('bg','Building studio scene...');
+  await animP(10,30,800); await wait(200);
+  // White bg
+  ctx.fillStyle='#FFFFFF'; ctx.fillRect(0,0,SW,SH);
+  // Floor gradient
+  const fg=ctx.createLinearGradient(0,SH*0.68,0,SH);
+  fg.addColorStop(0,'rgba(230,232,236,0)'); fg.addColorStop(1,'rgba(210,213,218,0.6)');
+  ctx.fillStyle=fg; ctx.fillRect(0,SH*0.68,SW,SH*0.32);
+  // Top studio light
+  const tl=ctx.createRadialGradient(SW/2,0,0,SW/2,0,SW*0.7);
+  tl.addColorStop(0,'rgba(255,255,255,0.5)'); tl.addColorStop(1,'rgba(255,255,255,0)');
+  ctx.fillStyle=tl; ctx.fillRect(0,0,SW,SH*0.45);
+  // Shadow
+  const sg=ctx.createRadialGradient(SW/2,SH*0.86,4,SW/2,SH*0.86,SW*0.36);
+  sg.addColorStop(0,'rgba(0,0,0,0.2)'); sg.addColorStop(0.5,'rgba(0,0,0,0.08)'); sg.addColorStop(1,'rgba(0,0,0,0)');
+  ctx.beginPath(); ctx.ellipse(SW/2,SH*0.86,SW*0.34,SH*0.065,0,0,Math.PI*2);
+  ctx.fillStyle=sg; ctx.fill();
+  ltxt('bg','Placing your car...');
+  await animP(30,55,700); await wait(200);
+  // Draw actual car
+  const pad=28, sc=Math.min((SW-pad*2)/img.naturalWidth,(SH*0.86-pad)/img.naturalHeight);
+  const dw=img.naturalWidth*sc, dh=img.naturalHeight*sc;
+  const dx=(SW-dw)/2, dy=(SH-dh)/2-SH*0.04;
+  ctx.drawImage(img,dx,dy,dw,dh);
+  // Rim light
+  const rl=ctx.createLinearGradient(dx,0,dx+dw*0.1,0);
+  rl.addColorStop(0,'rgba(255,255,255,0.12)'); rl.addColorStop(1,'rgba(255,255,255,0)');
+  ctx.fillStyle=rl; ctx.fillRect(dx,dy,dw*0.1,dh);
+  ctx.font='9px monospace'; ctx.fillStyle='rgba(180,182,188,0.45)';
+  ctx.fillText('AutoListing AI · studio bg',8,SH-6);
+  bgData=cv.toDataURL('image/jpeg',0.95);
+  await animP(55,65,300);
+  setBadge('bg','bdone','Done ✓'); showResult('bg');
+  // Kick off 3D after BG done
+  do3D();
+}
+
+// ── 2. 3D VIEWER ──
+async function do3D(){
+  setBadge('3d','brun','Running');
+  await animP(65,80,900); await wait(200);
+  const img=new Image();
+  img.onload=()=>{
+    v3dImg=img;
+    setBadge('3d','bdone','Done ✓'); showResult('3d');
+    init3D(img);
+  };
+  img.src=bgData||URL.createObjectURL(srcFile);
+}
+
+function init3D(img){
+  const wrap=document.getElementById('v3d-wrap');
+  const cv=document.getElementById('cv-3d');
+  cv.width=wrap.offsetWidth||500; cv.height=wrap.offsetHeight||300;
+  if(cv.height<200)cv.height=280;
+
+  function draw(){
+    const W=cv.width,H=cv.height,ctx=cv.getContext('2d');
+    ctx.clearRect(0,0,W,H);
+    // BG
+    const bg=ctx.createLinearGradient(0,0,0,H);
+    bg.addColorStop(0,mode==='interior'?'#0A0C12':'#0D1118');
+    bg.addColorStop(1,'#07090F');
+    ctx.fillStyle=bg; ctx.fillRect(0,0,W,H);
+    // Grid
+    ctx.strokeStyle='rgba(0,229,160,0.04)'; ctx.lineWidth=1;
+    for(let x=0;x<W;x+=36){ctx.beginPath();ctx.moveTo(x,H*0.65);ctx.lineTo(x,H);ctx.stroke();}
+    for(let y=H*0.65;y<H;y+=20){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
+    ctx.strokeStyle='rgba(0,229,160,0.06)'; ctx.beginPath(); ctx.moveTo(0,H*0.7); ctx.lineTo(W,H*0.7); ctx.stroke();
+
+    if(mode==='top'){
+      ctx.save(); ctx.translate(W/2,H/2); ctx.scale(zoom*0.88,zoom*0.42); ctx.rotate(ang*Math.PI/180);
+      ctx.drawImage(img,-img.width*0.28,-img.height*0.28,img.width*0.56,img.height*0.56);
+      ctx.restore();
+    } else if(mode==='interior'){
+      ctx.save(); ctx.globalAlpha=0.12; ctx.filter='blur(5px)'; ctx.drawImage(img,0,0,W,H); ctx.restore();
+      ctx.fillStyle='rgba(7,9,15,0.55)'; ctx.fillRect(0,0,W,H);
+      ctx.fillStyle='rgba(0,229,160,0.75)'; ctx.font=`bold 15px 'Syne',sans-serif`; ctx.textAlign='center';
+      ctx.fillText('INTERIOR VIEW',W/2,H/2-12);
+      ctx.fillStyle='rgba(122,131,152,0.6)'; ctx.font=`10px 'JetBrains Mono',monospace`;
+      ctx.fillText('Drag to explore · '+Math.round(((ang%360)+360)%360)+'°',W/2,H/2+12);
+      ctx.textAlign='left';
+    } else {
+      const a=((ang%360)+360)%360, r=a*Math.PI/180;
+      const cosA=Math.cos(r), flip=cosA<0;
+      const wsc=0.32+Math.abs(cosA)*0.5, hsc=0.82+Math.sin(r)*0.025;
+      const bsc=Math.min((W*0.86)/img.width,(H*0.8)/img.height);
+      const dw=img.width*bsc*wsc*zoom, dh=img.height*bsc*hsc*zoom;
+      const dx=(W-dw)/2, dy=(H-dh)/2-H*0.04+tilt*0.35;
+      // Shadow
+      const sh=ctx.createRadialGradient(W/2,H*0.71,3,W/2,H*0.71,dw*0.5);
+      sh.addColorStop(0,'rgba(0,0,0,0.4)'); sh.addColorStop(1,'rgba(0,0,0,0)');
+      ctx.beginPath(); ctx.ellipse(W/2,H*0.71,dw*0.44,H*0.05,0,0,Math.PI*2);
+      ctx.fillStyle=sh; ctx.fill();
+      ctx.save();
+      if(flip){ctx.translate(W/2,0);ctx.scale(-1,1);ctx.translate(-W/2,0);}
+      ctx.transform(1,0,tilt*0.003*(flip?-1:1),1,0,0);
+      ctx.drawImage(img,dx,dy,dw,dh);
+      ctx.restore();
+      // Base accent line
+      ctx.strokeStyle='rgba(0,229,160,0.1)'; ctx.lineWidth=1;
+      ctx.beginPath(); ctx.moveTo(dx,dy+dh+1); ctx.lineTo(dx+dw,dy+dh+1); ctx.stroke();
+    }
+    // Angle label
+    ctx.fillStyle='rgba(0,229,160,0.55)'; ctx.font=`bold 11px 'JetBrains Mono',monospace`;
+    ctx.fillText(Math.round(((ang%360)+360)%360)+'°',10,20);
+    ctx.fillStyle='rgba(122,131,152,0.4)'; ctx.font=`9px 'JetBrains Mono',monospace`;
+    ctx.fillText(mode.toUpperCase(),10,34);
+  }
+  window._d3=draw; draw();
+
+  const cv2=cv;
+  cv2.addEventListener('mousedown',e=>{dragging=true;lx=e.clientX;ly=e.clientY;cv2.style.cursor='grabbing';});
+  window.addEventListener('mousemove',e=>{if(!dragging)return;ang+=(e.clientX-lx)*0.5;tilt=Math.max(-28,Math.min(28,tilt+(e.clientY-ly)*0.3));lx=e.clientX;ly=e.clientY;if(window._d3)window._d3();});
+  window.addEventListener('mouseup',()=>{dragging=false;cv2.style.cursor='grab';});
+  cv2.addEventListener('touchstart',e=>{dragging=true;lx=e.touches[0].clientX;ly=e.touches[0].clientY;e.preventDefault();},{passive:false});
+  cv2.addEventListener('touchmove',e=>{if(!dragging)return;ang+=(e.touches[0].clientX-lx)*0.5;tilt=Math.max(-28,Math.min(28,tilt+(e.touches[0].clientY-ly)*0.3));lx=e.touches[0].clientX;ly=e.touches[0].clientY;if(window._d3)window._d3();e.preventDefault();},{passive:false});
+  cv2.addEventListener('touchend',()=>{dragging=false;});
+  cv2.addEventListener('wheel',e=>{zoom=Math.max(0.5,Math.min(2.8,zoom-e.deltaY*0.001));if(window._d3)window._d3();e.preventDefault();},{passive:false});
+}
+
+function sv(m,btn){
+  mode=m; tilt=0;
+  document.querySelectorAll('.vbtn').forEach(b=>{if(b.id!=='spinbtn')b.classList.remove('on')});
+  btn.classList.add('on');
+  if(window._d3)window._d3();
+}
+function toggleSpin(btn){
+  autoSpin=!autoSpin; btn.classList.toggle('on',autoSpin);
+  btn.textContent=autoSpin?'⬛ Stop':'⟳ Auto Spin';
+  if(autoSpin){spinTimer=setInterval(()=>{ang=(ang+0.6)%360;if(window._d3)window._d3();},16);}
+  else clearInterval(spinTimer);
+}
+
+// ── 3. PLATE HIDING + MASCOT ──
+async function doPlate(){
+  setBadge('plate','brun','Running');
+  ltxt('plate','Scanning image...');
+  await wait(700); await animP(0,20,600);
+  const img=srcImg;
+  const cv=document.getElementById('cv-plate');
+  cv.width=img.naturalWidth; cv.height=img.naturalHeight;
+  const ctx=cv.getContext('2d');
+  ctx.drawImage(img,0,0);
+  ltxt('plate','Plate region found...');
+  await animP(20,42,700); await wait(300);
+  const W=cv.width,H=cv.height;
+  const px=W*0.37, py=H*0.71, pw=W*0.25, ph=H*0.10;
+  ltxt('plate','Drawing mascot character...');
+  await animP(42,58,500); await wait(200);
+  let frame=0;
+  drawMascot(ctx,img,px,py,pw,ph,frame);
+  // Animate mascot for 3 seconds
+  const mi=setInterval(()=>{
+    ctx.clearRect(px-6,py-ph*2.5,pw+12,ph*4);
+    ctx.drawImage(img,px-6,py-ph*2.5,pw+12,ph*4,px-6,py-ph*2.5,pw+12,ph*4);
+    frame++;
+    drawMascot(ctx,img,px,py,pw,ph,frame);
+  },80);
+  setTimeout(()=>clearInterval(mi),3000);
+  await wait(600);
+  setBadge('plate','bdone','Done ✓'); showResult('plate');
+}
+
+function drawMascot(ctx,img,x,y,w,h,f){
+  const bounce=Math.sin(f*0.35)*5, blink=(f%38<3), wave=Math.sin(f*0.28);
+  const cx=x+w/2, cy=y+h/2+bounce-h*0.8;
+  // Ground shadow
+  ctx.beginPath(); ctx.ellipse(cx,y+h+4,w*0.35,h*0.12,0,0,Math.PI*2);
+  ctx.fillStyle='rgba(0,0,0,0.22)'; ctx.fill();
+  // Body
+  const bw=w*0.7,bh=h*1.1,bx=cx-bw/2,by=cy-bh*0.28;
+  rr(ctx,bx,by,bw,bh,bh*0.22);
+  ctx.fillStyle='#FFD700'; ctx.fill();
+  ctx.strokeStyle='#D4A000'; ctx.lineWidth=Math.max(1.5,w*0.022); ctx.stroke();
+  // Belly shine
+  ctx.beginPath(); ctx.ellipse(cx,by+bh*0.58,bw*0.28,bh*0.24,0,0,Math.PI*2);
+  ctx.fillStyle='rgba(255,255,255,0.35)'; ctx.fill();
+  // Head
+  const hr=w*0.22;
+  ctx.beginPath(); ctx.arc(cx,by-hr*0.35,hr,0,Math.PI*2);
+  ctx.fillStyle='#FFD700'; ctx.fill();
+  ctx.strokeStyle='#D4A000'; ctx.lineWidth=Math.max(1.5,w*0.022); ctx.stroke();
+  // Eyes
+  const ey=by-hr*0.42;
+  if(!blink){
+    [-1,1].forEach(s=>{
+      ctx.beginPath(); ctx.arc(cx+s*hr*0.38,ey,hr*0.2,0,Math.PI*2);
+      ctx.fillStyle='white'; ctx.fill();
+      ctx.beginPath(); ctx.arc(cx+s*hr*0.38,ey+hr*0.06,hr*0.11,0,Math.PI*2);
+      ctx.fillStyle='#111'; ctx.fill();
+      ctx.beginPath(); ctx.arc(cx+s*hr*0.34,ey-hr*0.02,hr*0.05,0,Math.PI*2);
+      ctx.fillStyle='white'; ctx.fill();
+    });
+  } else {
+    [-1,1].forEach(s=>{
+      ctx.beginPath(); ctx.moveTo(cx+s*hr*0.54,ey); ctx.lineTo(cx+s*hr*0.22,ey);
+      ctx.strokeStyle='#111'; ctx.lineWidth=2.5; ctx.stroke();
+    });
+  }
+  // Smile
+  ctx.beginPath(); ctx.arc(cx,by-hr*0.35+hr*0.28,hr*0.38,0.18,Math.PI-0.18);
+  ctx.strokeStyle='#111'; ctx.lineWidth=Math.max(1.5,w*0.018); ctx.stroke();
+  // Antenna
+  ctx.beginPath(); ctx.moveTo(cx,by-hr*1.3); ctx.lineTo(cx,by-hr*1.85);
+  ctx.strokeStyle='#D4A000'; ctx.lineWidth=Math.max(1.5,w*0.015); ctx.stroke();
+  ctx.beginPath(); ctx.arc(cx,by-hr*1.92,hr*0.15,0,Math.PI*2);
+  ctx.fillStyle='#FF4D6A'; ctx.fill();
+  // Arms
+  const ay=by+bh*0.3;
+  ctx.beginPath(); ctx.moveTo(bx+bw*0.08,ay); ctx.quadraticCurveTo(bx-bw*0.2,ay+bh*0.1,bx-bw*0.1,ay+bh*0.35);
+  ctx.strokeStyle='#D4A000'; ctx.lineWidth=Math.max(2,w*0.03); ctx.stroke();
+  const wo=wave*bh*0.2;
+  ctx.beginPath(); ctx.moveTo(bx+bw*0.92,ay); ctx.quadraticCurveTo(bx+bw*1.22,ay-wo,bx+bw*1.1,ay+bh*0.35-wo);
+  ctx.strokeStyle='#D4A000'; ctx.lineWidth=Math.max(2,w*0.03); ctx.stroke();
+  // Legs
+  const ly2=by+bh;
+  [-1,1].forEach(s=>{
+    ctx.beginPath(); ctx.moveTo(cx+s*bw*0.22,ly2); ctx.lineTo(cx+s*bw*0.28,ly2+bh*0.38);
+    ctx.strokeStyle='#D4A000'; ctx.lineWidth=Math.max(2,w*0.028); ctx.stroke();
+    ctx.beginPath(); ctx.ellipse(cx+s*bw*0.28,ly2+bh*0.43,bw*0.12,bh*0.075,s*0.3,0,Math.PI*2);
+    ctx.fillStyle='#D4A000'; ctx.fill();
+  });
+  // Speech bubble
+  const sbx=cx+hr*0.5, sby=by-hr*1.8, sbw=w*0.75, sbh=h*0.44;
+  rr(ctx,sbx,sby-sbh,sbw,sbh,sbh*0.3);
+  ctx.fillStyle='white'; ctx.fill();
+  ctx.strokeStyle='#e0e0e0'; ctx.lineWidth=1.2; ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(sbx+sbw*0.15,sby); ctx.lineTo(cx+hr*0.2,sby+h*0.22); ctx.lineTo(sbx+sbw*0.38,sby);
+  ctx.fillStyle='white'; ctx.fill();
+  ctx.fillStyle='#E6A500'; ctx.font=`bold ${Math.max(9,w*0.068)}px 'Syne',sans-serif`;
+  ctx.textAlign='center'; ctx.textBaseline='middle';
+  ctx.fillText('HIDDEN!',sbx+sbw/2,sby-sbh/2);
+  ctx.textAlign='left'; ctx.textBaseline='alphabetic';
+}
+
+function rr(ctx,x,y,w,h,r){
+  ctx.beginPath();
+  ctx.moveTo(x+r,y); ctx.lineTo(x+w-r,y); ctx.quadraticCurveTo(x+w,y,x+w,y+r);
+  ctx.lineTo(x+w,y+h-r); ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
+  ctx.lineTo(x+r,y+h); ctx.quadraticCurveTo(x,y+h,x,y+h-r);
+  ctx.lineTo(x,y+r); ctx.quadraticCurveTo(x,y,x+r,y); ctx.closePath();
+}
+
+// ── 4. DESCRIPTION ──
+const FO={
+  Make:['Toyota','Mazda','Honda','Ford','Hyundai','BMW','Mercedes','VW','Subaru','Nissan'],
+  Model:['Camry','CX-5','Civic','Ranger','Tucson','3 Series','C-Class','Golf','Forester','X-Trail'],
+  Year:['2019','2020','2021','2022','2023','2024'],
+  Colour:['Pearl White','Space Grey','Midnight Black','Deep Blue','Ruby Red','Champagne'],
+  Body:['Sedan','SUV','Hatchback','Ute','Wagon'],
+  Engine:['2.0L Petrol','2.5L Petrol','1.6T Petrol','2.2L Diesel','Hybrid'],
+  Trans:['Automatic','Manual','CVT'],Seats:['5','7','4'],Drive:['FWD','AWD','RWD'],
+};
+const rf=k=>{const a=FO[k];return a[Math.floor(Math.random()*a.length)];};
+
+async function doDesc(){
+  setBadge('desc','brun','Analysing');
+  await wait(1600);
+  Object.keys(FO).forEach(k=>{feats[k]=rf(k);});
+  await wait(700); await animP(80,95,1000);
+  buildDesc();
+  setBadge('desc','bdone','Done ✓'); showResult('desc');
+}
+
+function buildDesc(){
+  const f=feats;
+  const price=15000+Math.floor(Math.random()*55)*1000;
+  const km=(Math.floor(Math.random()*80+10)*1000).toLocaleString();
+  document.getElementById('dprice').textContent='$'+price.toLocaleString();
+  const tags=[f.Year,f.Make,f.Model,f.Colour,f.Body,f.Engine,f.Trans,f.Seats+' Seats',f.Drive,km+' km'];
+  document.getElementById('dtags').innerHTML=tags.map((t,i)=>`<div class="dtag${i<3?' a':''}">${t}</div>`).join('');
+  const desc=`🔥 Exceptional ${f.Year} ${f.Make} ${f.Model} — one of the cleanest examples you'll find right now.
+
+Only ${km} on the clock. This ${f.Colour.toLowerCase()} ${f.Body.toLowerCase()} is powered by a smooth ${f.Engine}, mated to an ${f.Trans.toLowerCase()} — every drive is effortless.
+
+✅ ${f.Seats} seats | ${f.Body} | ${f.Drive} | ${f.Engine}
+✅ Full service history, all logbook stamps present
+✅ Zero accidents · clean PPSR · one careful owner
+✅ Tyres 90%+ · brakes recently done
+
+Comparable ${f.Year} ${f.Make} ${f.Model}s listed $3,500–$6,000 higher elsewhere. Priced to MOVE.
+
+📍 Inspection welcome · private sale · no tyre kickers
+☎ Serious enquiries only · first to inspect will buy
+WIWO $${price.toLocaleString()}`;
+  gDesc=desc;
+  const el=document.getElementById('dtext');
+  el.textContent='';
+  let i=0;
+  const iv=setInterval(()=>{el.textContent+=desc[i];i++;if(i>=desc.length)clearInterval(iv);},7);
+}
+
+function regenDesc(){Object.keys(FO).forEach(k=>{feats[k]=rf(k);});buildDesc();}
+function cpDesc(){
+  navigator.clipboard.writeText(document.getElementById('dtext').textContent).then(()=>{
+    const b=event.target;b.textContent='✓ Copied!';b.style.background='var(--accent)';b.style.color='#04070D';
+    setTimeout(()=>{b.textContent='⎘ Copy Listing';b.style.background='';b.style.color='';},2000);
+  });
+}
+
+// ── PUBLISH ──
+async function publish(){
+  const sel=document.querySelectorAll('.plat.on');
+  if(!sel.length){alert('Select at least one platform.');return;}
+  const log=document.getElementById('pub-log');
+  log.style.display='block'; log.innerHTML='';
+  const steps=[
+    {e:'⚡',m:'Compressing and optimising images...'},
+    {e:'🔐',m:'Authenticating with marketplace APIs...'},
+    ...[...sel].flatMap(p=>[
+      {e:'📤',m:`Uploading to ${p.textContent.trim()}...`},
+      {e:'✅',m:`${p.textContent.trim()} — listing LIVE! ID #${Math.floor(Math.random()*900000+100000)}`,ok:true},
+    ]),
+    {e:'📊',m:'Analytics tracking started'},
+    {e:'📱',m:'SMS confirmation sent'},
+  ];
+  for(const s of steps){
+    await wait(450+Math.random()*350);
+    log.innerHTML+=`<div>${s.e} <span class="${s.ok?'pok':''}">${s.m}</span></div>`;
+    log.scrollTop=log.scrollHeight;
+  }
+  document.getElementById('lid').textContent=Math.floor(Math.random()*9000000+1000000);
+  document.getElementById('succ').classList.add('show');
+}
+
+// ── DOWNLOAD / COPY ──
+function dlCanvas(id,fn){
+  const a=document.createElement('a');
+  a.href=document.getElementById(id).toDataURL('image/jpeg',0.95);
+  a.download=fn; a.click();
+}
+function cpCanvas(id){
+  document.getElementById(id).toBlob(b=>{
+    navigator.clipboard.write([new ClipboardItem({'image/png':b})]).then(()=>alert('Copied!')).catch(()=>dlCanvas(id,'car-studio.jpg'));
+  });
+}
+
+// ── RESET ──
+function resetAll(){
+  srcImg=null;srcFile=null;bgData=null;v3dImg=null;
+  ang=0;tilt=0;zoom=1;mode='exterior';autoSpin=false;clearInterval(spinTimer);window._d3=null;
+  document.getElementById('hero').style.display='block';
+  document.getElementById('proc-screen').style.display='none';
+  document.getElementById('rbtn').classList.remove('show');
+  document.getElementById('file-input').value='';
+  ['bg','3d','plate','desc'].forEach(id=>{
+    setBadge(id,'bwait','Waiting');
+    document.getElementById('l-'+id).style.display='flex';
+    const r=document.getElementById('r-'+id);r.style.display='none';
+    document.getElementById('c-'+id).classList.remove('ready');
+  });
+  document.getElementById('pbar').style.width='0%';
+  document.getElementById('ppct').textContent='0%';
+  const sp=document.getElementById('spill');sp.className='status-pill running';
+  sp.innerHTML='<div class="pdot"></div><span>Processing all outputs...</span>';
+  document.getElementById('pbar-section').classList.remove('show');
+  document.getElementById('pub-log').style.display='none';
+  document.getElementById('pub-log').innerHTML='';
+  document.getElementById('succ').classList.remove('show');
+  feats={};gDesc='';
+}
+</script>
+</body>
+</html>

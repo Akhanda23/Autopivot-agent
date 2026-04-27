@@ -9,16 +9,13 @@
 :root {
   --white: #ffffff;
   --off: #f5f6f9;
-  --light: #eceef4;
   --border: #dde0ea;
   --mid: #9aa0b8;
-  --text: #0d1f3c;        /* dark navy — primary text & backgrounds */
+  --text: #0d1f3c;
   --muted: #5a6480;
-  --gold: #c9a84c;        /* primary gold accent */
-  --gold-light: #f5edda;  /* gold tint for backgrounds */
-  --gold-border: #e8d5a3; /* gold-toned border */
-  --green: #1a7a4a;
-  --green-light: #e8f5ed;
+  --gold: #c9a84c;
+  --gold-light: #f5edda;
+  --gold-border: #e8d5a3;
   --red: #b83232;
 }
 
@@ -34,569 +31,319 @@ body {
   overflow-x: hidden;
 }
 
-/* ─── PAGE ROUTING ─── */
 .page { display: none; }
 .page.active { display: block; }
 
-/* ─── NAV ─── */
+/* ── NAV ── */
 nav {
-  position: fixed;
-  top: 0; left: 0; right: 0;
+  position: fixed; top: 0; left: 0; right: 0;
   z-index: 1000;
   background: rgba(255,255,255,0.97);
   backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--border);
   border-top: 3px solid var(--gold);
-  padding: 0 48px;
-  height: 67px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  padding: 0 48px; height: 67px;
+  display: flex; align-items: center; justify-content: space-between;
 }
 
 .nav-logo {
-  font-family: 'Syne', sans-serif;
-  font-weight: 800;
-  font-size: 20px;
-  letter-spacing: -0.5px;
-  color: var(--text);
-  text-decoration: none;
-  cursor: pointer;
-  user-select: none;
+  font-family: 'Syne', sans-serif; font-weight: 800; font-size: 20px;
+  letter-spacing: -0.5px; color: var(--text); cursor: pointer; user-select: none;
 }
 
 .nav-logo-dot {
-  display: inline-block;
-  width: 7px; height: 7px;
-  background: var(--gold);
-  border-radius: 50%;
-  margin-left: 3px;
-  vertical-align: middle;
-  margin-bottom: 3px;
+  display: inline-block; width: 7px; height: 7px;
+  background: var(--gold); border-radius: 50%;
+  margin-left: 3px; vertical-align: middle; margin-bottom: 3px;
 }
 
-.nav-center {
-  display: flex;
-  align-items: center;
-  gap: 32px;
-  list-style: none;
-}
-
-.nav-center a {
-  font-size: 14px;
-  font-weight: 400;
-  color: var(--muted);
-  text-decoration: none;
-  transition: color 0.2s;
-  cursor: pointer;
-}
-
+.nav-center { display: flex; align-items: center; gap: 32px; list-style: none; }
+.nav-center a { font-size: 14px; color: var(--muted); text-decoration: none; transition: color 0.2s; cursor: pointer; }
 .nav-center a:hover { color: var(--gold); }
 
-/* Right cluster */
 .nav-right { display: flex; align-items: center; gap: 8px; }
 
 .btn-nav-login {
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--text);
-  background: transparent;
-  border: 1px solid var(--border);
-  padding: 9px 18px;
-  border-radius: 7px;
-  cursor: pointer;
-  font-family: 'DM Sans', sans-serif;
-  transition: all 0.2s;
+  font-size: 14px; font-weight: 500; color: var(--text);
+  background: transparent; border: 1px solid var(--border);
+  padding: 9px 18px; border-radius: 7px; cursor: pointer;
+  font-family: 'DM Sans', sans-serif; transition: all 0.2s;
 }
-
 .btn-nav-login:hover { border-color: var(--gold); color: var(--gold); }
 
 .btn-nav-signup {
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--text);
-  background: var(--gold);
-  border: none;
-  padding: 9px 20px;
-  border-radius: 7px;
-  cursor: pointer;
-  font-family: 'DM Sans', sans-serif;
-  transition: all 0.2s;
-  letter-spacing: 0.2px;
+  font-size: 14px; font-weight: 600; color: var(--text);
+  background: var(--gold); border: none; padding: 9px 20px;
+  border-radius: 7px; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.2s;
 }
-
 .btn-nav-signup:hover { background: #b8943e; }
 
-/* Logged-in avatar chip */
 .nav-user-chip {
-  display: none;
-  align-items: center;
-  gap: 9px;
-  padding: 5px 14px 5px 5px;
-  border: 1px solid var(--border);
-  border-radius: 100px;
-  cursor: pointer;
-  transition: border-color 0.2s;
-  position: relative;
+  display: none; align-items: center; gap: 9px;
+  padding: 5px 14px 5px 5px; border: 1px solid var(--border);
+  border-radius: 100px; cursor: pointer; transition: border-color 0.2s;
 }
-
-.nav-user-chip:hover { border-color: var(--text); }
+.nav-user-chip:hover { border-color: var(--gold); }
 .nav-user-chip.show { display: flex; }
 
 .chip-avatar {
-  width: 32px; height: 32px;
-  border-radius: 50%;
-  background: var(--text);
-  color: var(--gold);
-  font-family: 'Syne', sans-serif;
-  font-size: 12px;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--text); color: var(--gold);
+  font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
 }
-
 .chip-name { font-size: 13px; font-weight: 500; }
 .chip-arrow { font-size: 9px; color: var(--muted); }
 
-/* Dropdown */
 .user-dropdown {
-  position: absolute;
-  top: 72px;
-  right: 48px;
-  background: var(--white);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  box-shadow: 0 12px 48px rgba(0,0,0,0.13);
-  width: 230px;
-  z-index: 2000;
-  overflow: hidden;
-  opacity: 0;
-  transform: translateY(-10px);
-  pointer-events: none;
+  position: absolute; top: 72px; right: 48px;
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: 14px; box-shadow: 0 12px 48px rgba(0,0,0,0.13);
+  width: 230px; z-index: 2000; overflow: hidden;
+  opacity: 0; transform: translateY(-10px); pointer-events: none;
   transition: opacity 0.18s, transform 0.18s;
 }
-
 .user-dropdown.open { opacity: 1; transform: translateY(0); pointer-events: all; }
 
-.dropdown-head {
-  padding: 16px 18px;
-  border-bottom: 1px solid var(--border);
-  background: var(--off);
-}
-
+.dropdown-head { padding: 16px 18px; border-bottom: 1px solid var(--border); background: var(--off); }
 .dropdown-head-name { font-size: 14px; font-weight: 600; }
 .dropdown-head-email { font-size: 12px; color: var(--muted); margin-top: 2px; }
-
-.dropdown-item {
-  padding: 12px 18px;
-  font-size: 14px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  transition: background 0.15s;
-  color: var(--text);
-}
-
+.dropdown-item { padding: 12px 18px; font-size: 14px; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: background 0.15s; color: var(--text); }
 .dropdown-item:hover { background: var(--off); }
 .dropdown-item.danger { color: var(--red); }
 
-/* ═══════════════════════════════════════
-   HOME PAGE
-═══════════════════════════════════════ */
+/* ── HERO ── */
 .hero {
-  padding: 148px 48px 96px;
-  max-width: 100%;
-  margin: 0;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0;
-  align-items: center;
-  background: var(--text);
-  position: relative;
-  overflow: hidden;
+  padding: 148px 48px 96px; max-width: 100%; margin: 0;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+  align-items: center; background: var(--text);
+  position: relative; overflow: hidden;
 }
 
-/* Gold diagonal band */
 .hero::before {
-  content: '';
-  position: absolute;
-  top: -120px; right: -180px;
+  content: ''; position: absolute; top: -120px; right: -180px;
   width: 520px; height: 520px;
   background: radial-gradient(ellipse at center, rgba(201,168,76,0.18) 0%, rgba(201,168,76,0.06) 45%, transparent 70%);
   pointer-events: none;
 }
-
-/* Subtle grid lines */
 .hero::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(rgba(201,168,76,0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(201,168,76,0.05) 1px, transparent 1px);
-  background-size: 60px 60px;
-  pointer-events: none;
+  content: ''; position: absolute; inset: 0;
+  background-image: linear-gradient(rgba(201,168,76,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(201,168,76,0.05) 1px, transparent 1px);
+  background-size: 60px 60px; pointer-events: none;
 }
 
 .hero > div:first-child {
   padding: 0 48px 0 max(48px, calc((100vw - 1200px)/2 + 48px));
-  position: relative;
-  z-index: 1;
+  position: relative; z-index: 1;
 }
-
 .hero > div:last-child {
   padding: 0 max(48px, calc((100vw - 1200px)/2 + 48px)) 0 48px;
-  position: relative;
-  z-index: 1;
+  position: relative; z-index: 1;
   background: rgba(255,255,255,0.03);
   border-left: 1px solid rgba(201,168,76,0.15);
-  height: 100%;
-  display: flex;
-  align-items: center;
+  height: 100%; display: flex; align-items: center;
 }
 
 .hero-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: rgba(201,168,76,0.12);
-  border: 1px solid rgba(201,168,76,0.3);
-  padding: 6px 14px;
-  border-radius: 100px;
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--gold);
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-  margin-bottom: 28px;
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(201,168,76,0.12); border: 1px solid rgba(201,168,76,0.3);
+  padding: 6px 14px; border-radius: 100px;
+  font-size: 12px; font-weight: 500; color: var(--gold);
+  letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 28px;
 }
-
 .hero-badge::before {
-  content: '';
-  width: 6px; height: 6px;
-  background: var(--gold);
-  border-radius: 50%;
-  animation: pulse 2s infinite;
+  content: ''; width: 6px; height: 6px; background: var(--gold);
+  border-radius: 50%; animation: pulse 2s infinite;
 }
-
-@keyframes pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.5; transform: scale(0.8); }
-}
+@keyframes pulse { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:0.5; transform:scale(0.8); } }
 
 .hero h1 {
   font-family: 'Instrument Serif', serif;
   font-size: clamp(42px, 5vw, 64px);
-  line-height: 1.08;
-  letter-spacing: -1px;
-  margin-bottom: 24px;
-  color: #ffffff;
+  line-height: 1.08; letter-spacing: -1px; margin-bottom: 24px; color: #fff;
 }
-
 .hero h1 em { font-style: italic; color: var(--gold); }
 
 .hero > div > p {
-  font-size: 17px;
-  color: rgba(255,255,255,0.6);
-  font-weight: 300;
-  line-height: 1.7;
-  max-width: 420px;
-  margin-bottom: 40px;
+  font-size: 17px; color: rgba(255,255,255,0.6);
+  font-weight: 300; line-height: 1.7; max-width: 420px; margin-bottom: 40px;
 }
 
 .hero-actions { display: flex; align-items: center; gap: 16px; margin-bottom: 0; }
 
 .btn-primary {
-  background: var(--text);
-  color: var(--white);
-  padding: 14px 28px;
-  border-radius: 8px;
-  font-size: 15px;
-  font-weight: 500;
-  text-decoration: none;
-  border: none;
-  cursor: pointer;
-  font-family: 'DM Sans', sans-serif;
-  transition: all 0.2s;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
+  background: var(--gold); color: var(--text);
+  padding: 14px 28px; border-radius: 8px; font-size: 15px; font-weight: 600;
+  text-decoration: none; border: none; cursor: pointer;
+  font-family: 'DM Sans', sans-serif; transition: all 0.2s;
+  display: inline-flex; align-items: center; gap: 8px;
 }
-
-.btn-primary:hover { background: #162d58; transform: translateY(-1px); box-shadow: 0 6px 24px rgba(13,31,60,0.22); }
+.btn-primary:hover { background: #b8943e; transform: translateY(-1px); box-shadow: 0 6px 24px rgba(201,168,76,0.3); }
 
 .btn-ghost {
-  color: rgba(255,255,255,0.55);
-  font-size: 14px;
-  text-decoration: none;
-  cursor: pointer;
-  transition: color 0.2s;
+  color: rgba(255,255,255,0.55); font-size: 14px;
+  text-decoration: none; cursor: pointer; transition: color 0.2s;
 }
-
 .btn-ghost:hover { color: var(--gold); }
 
 .hero-stats {
-  display: flex;
-  gap: 32px;
-  padding-top: 40px;
-  border-top: 1px solid rgba(201,168,76,0.2);
-  margin-top: 40px;
+  display: flex; gap: 32px; padding-top: 40px;
+  border-top: 1px solid rgba(201,168,76,0.2); margin-top: 40px;
 }
-
-.stat-num {
-  font-family: 'Syne', sans-serif;
-  font-size: 32px;
-  font-weight: 700;
-  line-height: 1;
-  margin-bottom: 4px;
-  color: var(--gold);
-}
-
+.stat-num { font-family: 'Syne', sans-serif; font-size: 32px; font-weight: 700; line-height: 1; margin-bottom: 4px; color: var(--gold); }
 .stat-label { font-size: 13px; color: rgba(255,255,255,0.5); }
 
-/* Hero card */
+/* Hero mock card */
 .hero-card {
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(201,168,76,0.25);
-  border-radius: 16px;
-  overflow: hidden;
-  width: 100%;
+  background: rgba(255,255,255,0.06); border: 1px solid rgba(201,168,76,0.25);
+  border-radius: 16px; overflow: hidden; width: 100%;
 }
-
 .hero-card-bar {
-  padding: 13px 18px;
-  border-bottom: 1px solid rgba(201,168,76,0.15);
+  padding: 13px 18px; border-bottom: 1px solid rgba(201,168,76,0.15);
   background: rgba(255,255,255,0.04);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  display: flex; align-items: center; justify-content: space-between;
 }
-
 .hero-dots { display: flex; gap: 6px; }
-.hero-dots span { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.15); }
+.hero-dots span { width: 10px; height: 10px; border-radius: 50%; }
 .hero-dots span:nth-child(1) { background: #ff6058; }
 .hero-dots span:nth-child(2) { background: #ffbd2e; }
 .hero-dots span:nth-child(3) { background: #28ca41; }
-
 .hero-card-label { font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.5); }
 
 .hero-img {
   height: 280px;
   background: linear-gradient(135deg, rgba(13,31,60,0.8), rgba(8,18,36,0.95));
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
+  display: flex; align-items: center; justify-content: center; position: relative;
 }
-
 .hero-placeholder { text-align: center; color: rgba(255,255,255,0.3); }
 .hero-placeholder svg { width: 60px; height: 60px; opacity: 0.35; margin-bottom: 10px; }
 .hero-placeholder p { font-size: 13px; }
 
 .plate-chip {
-  position: absolute;
-  bottom: 18px; right: 18px;
-  background: rgba(13,31,60,0.9);
-  border: 1px solid rgba(201,168,76,0.4);
-  border-radius: 8px;
-  padding: 9px 13px;
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  font-size: 12px;
-  font-weight: 500;
-  color: rgba(255,255,255,0.85);
+  position: absolute; bottom: 18px; right: 18px;
+  background: rgba(13,31,60,0.9); border: 1px solid rgba(201,168,76,0.4);
+  border-radius: 8px; padding: 9px 13px;
+  display: flex; align-items: center; gap: 7px;
+  font-size: 12px; font-weight: 500; color: rgba(255,255,255,0.85);
   box-shadow: 0 4px 20px rgba(0,0,0,0.3);
 }
-
 .plate-chip-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--gold); }
 
-/* Ticker */
+/* ── TICKER ── */
 .ticker-wrap { background: var(--text); padding: 14px 0; overflow: hidden; }
-
-.ticker-track {
-  display: flex;
-  white-space: nowrap;
-  animation: ticker 26s linear infinite;
-}
-
-@keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-
-.ticker-item {
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
-  padding: 0 32px;
-  font-size: 13px;
-  font-weight: 500;
-  color: rgba(255,255,255,0.75);
-  letter-spacing: 0.4px;
-}
-
+.ticker-track { display: flex; white-space: nowrap; animation: ticker 28s linear infinite; }
+@keyframes ticker { from { transform:translateX(0); } to { transform:translateX(-50%); } }
+.ticker-item { display: inline-flex; align-items: center; gap: 12px; padding: 0 32px; font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.75); letter-spacing: 0.4px; }
 .tdot { width: 4px; height: 4px; background: var(--gold); border-radius: 50%; flex-shrink: 0; }
 
-/* Sections */
+/* ── SECTIONS ── */
 .section { padding: 96px 48px; max-width: 1200px; margin: 0 auto; }
 
-/* How it works wrapper gets a subtle navy bg */
-#how {
-  background: linear-gradient(180deg, #f0f3f8 0%, #ffffff 100%);
-  border-bottom: 1px solid var(--border);
-}
+#how { background: linear-gradient(180deg, #f0f3f8 0%, #ffffff 100%); border-bottom: 1px solid var(--border); }
 
 .eyebrow {
-  font-family: 'Syne', sans-serif;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--gold);
-  margin-bottom: 14px;
+  font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 700;
+  letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 14px;
 }
-
-.sec-title {
-  font-family: 'Instrument Serif', serif;
-  font-size: clamp(30px, 4vw, 50px);
-  line-height: 1.1;
-  letter-spacing: -0.5px;
-  max-width: 620px;
-}
-
+.sec-title { font-family: 'Instrument Serif', serif; font-size: clamp(30px, 4vw, 50px); line-height: 1.1; letter-spacing: -0.5px; max-width: 620px; }
 .sec-title em { font-style: italic; color: var(--gold); }
 
-/* How grid */
+/* How-it-works grid */
 .how-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 2px;
-  margin-top: 56px;
-  background: var(--border);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 4px 32px rgba(13,31,60,0.08);
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 2px; margin-top: 56px;
+  background: var(--border); border: 1px solid var(--border);
+  border-radius: 16px; overflow: hidden; box-shadow: 0 4px 32px rgba(13,31,60,0.08);
 }
-
-.how-card {
-  background: var(--white);
-  padding: 38px 34px;
-  position: relative;
-  transition: background 0.2s;
-}
-
+.how-card { background: var(--white); padding: 38px 34px; transition: background 0.2s; }
 .how-card:hover { background: #fafbff; }
-
-.how-card { background: var(--white); padding: 38px 34px; }
 .how-num { font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 2px; color: var(--gold); margin-bottom: 22px; }
 .how-icon { width: 46px; height: 46px; background: var(--gold-light); border: 1px solid var(--gold-border); border-radius: 11px; display: flex; align-items: center; justify-content: center; font-size: 20px; margin-bottom: 18px; }
 .how-card h3 { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700; margin-bottom: 9px; }
 .how-card p { font-size: 14px; color: var(--muted); line-height: 1.6; }
 
-/* Tool section */
+/* ── TOOL SECTION ── */
 .tool-band {
-  background: var(--text);
-  border-top: none;
-  border-bottom: none;
-  position: relative;
-  overflow: hidden;
+  background: var(--text); position: relative; overflow: hidden;
 }
-
 .tool-band::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(rgba(201,168,76,0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(201,168,76,0.04) 1px, transparent 1px);
-  background-size: 48px 48px;
-  pointer-events: none;
+  content: ''; position: absolute; inset: 0;
+  background-image: linear-gradient(rgba(201,168,76,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(201,168,76,0.04) 1px, transparent 1px);
+  background-size: 48px 48px; pointer-events: none;
 }
-
 .tool-band::after {
-  content: '';
-  position: absolute;
-  bottom: -100px; left: 50%;
-  transform: translateX(-50%);
+  content: ''; position: absolute; bottom: -100px; left: 50%; transform: translateX(-50%);
   width: 600px; height: 300px;
   background: radial-gradient(ellipse at center, rgba(201,168,76,0.1) 0%, transparent 70%);
   pointer-events: none;
 }
 .tool-inner { padding: 96px 48px; max-width: 1200px; margin: 0 auto; position: relative; z-index: 1; }
-.tool-head { text-align: center; margin-bottom: 52px; }
-.tool-head .sec-title { margin: 0 auto 14px; text-align: center; color: #ffffff; }
-.tool-head p { color: rgba(255,255,255,0.55); font-size: 16px; font-weight: 300; max-width: 460px; margin: 0 auto; }
 
+.tool-head { text-align: center; margin-bottom: 52px; }
+.tool-head .sec-title { margin: 0 auto 14px; text-align: center; color: #fff; }
+.tool-head p { color: rgba(255,255,255,0.55); font-size: 16px; font-weight: 300; max-width: 500px; margin: 0 auto; }
+
+/* Mode tabs */
+.mode-tabs {
+  display: flex; max-width: 760px; margin: 0 auto 32px;
+  background: rgba(255,255,255,0.06); border: 1px solid rgba(201,168,76,0.2);
+  border-radius: 12px; padding: 6px; gap: 6px;
+}
+.mode-tab {
+  flex: 1; padding: 12px 16px; border-radius: 8px; border: none;
+  background: transparent; color: rgba(255,255,255,0.5);
+  font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 600;
+  cursor: pointer; transition: all 0.22s; display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.mode-tab.active { background: var(--gold); color: var(--text); }
+.mode-tab:not(.active):hover { color: var(--gold); background: rgba(201,168,76,0.08); }
+.mode-tab-icon { font-size: 16px; }
+
+/* Tool card */
 .tool-card {
-  max-width: 740px;
-  margin: 0 auto;
-  background: var(--white);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  overflow: hidden;
+  max-width: 760px; margin: 0 auto;
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: 16px; overflow: hidden;
   box-shadow: 0 24px 80px rgba(0,0,0,0.4), 0 0 0 1px rgba(201,168,76,0.15);
   border-top: 3px solid var(--gold);
 }
-
 .tool-card-top {
-  padding: 18px 26px;
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  padding: 18px 26px; border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
 }
-
 .tool-card-top h3 { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; }
 
-.gem-pill {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  background: var(--gold-light);
-  border: 1px solid var(--gold-border);
-  padding: 5px 12px;
-  border-radius: 100px;
-  font-size: 12px;
-  color: #8a6520;
-  font-weight: 500;
+.ai-pill {
+  display: flex; align-items: center; gap: 6px;
+  background: var(--gold-light); border: 1px solid var(--gold-border);
+  padding: 5px 12px; border-radius: 100px;
+  font-size: 12px; font-weight: 500; color: #8a6520;
 }
-
-.gem-pill::before { content: '✦'; font-size: 9px; color: var(--gold); }
+.ai-pill::before { content: '✦'; font-size: 9px; color: var(--gold); }
 
 .tool-body { padding: 28px 26px; }
 
+/* Upload zone */
 .upload-zone {
-  border: 2px dashed var(--border);
-  border-radius: 12px;
-  padding: 52px 20px;
-  text-align: center;
-  cursor: pointer;
-  position: relative;
-  background: var(--off);
-  transition: all 0.22s;
+  border: 2px dashed var(--border); border-radius: 12px;
+  padding: 52px 20px; text-align: center; cursor: pointer;
+  position: relative; background: var(--off); transition: all 0.22s;
 }
-
 .upload-zone:hover, .upload-zone.drag { border-color: var(--gold); background: var(--gold-light); }
 .upload-zone input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
-
-.upload-icon {
-  width: 52px; height: 52px;
-  background: var(--white);
-  border: 1px solid var(--border);
-  border-radius: 13px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 22px;
-  margin: 0 auto 14px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-}
-
+.upload-icon { width: 52px; height: 52px; background: var(--white); border: 1px solid var(--gold-border); border-radius: 13px; display: flex; align-items: center; justify-content: center; font-size: 22px; margin: 0 auto 14px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
 .upload-zone h4 { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; margin-bottom: 5px; }
 .upload-zone p { font-size: 13px; color: var(--muted); }
 
+/* Progress bar */
+.progress-wrap { display: none; margin-top: 18px; }
+.progress-wrap.show { display: block; }
+.progress-label { font-size: 13px; font-weight: 500; color: var(--muted); margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+.progress-label span { color: var(--gold); font-family: 'Syne', sans-serif; font-weight: 700; font-size: 12px; }
+.progress-bar { height: 6px; background: var(--border); border-radius: 6px; overflow: hidden; }
+.progress-fill { height: 100%; background: linear-gradient(90deg, var(--gold), #e8c56a); border-radius: 6px; width: 0%; transition: width 0.4s ease; }
+
+/* Comparison */
 .comp { display: none; gap: 14px; margin-top: 22px; }
 .comp.show { display: grid; grid-template-columns: 1fr 1fr; }
 
@@ -609,412 +356,192 @@ nav {
 .badge.working { background: #eef2fb; color: var(--text); border-color: #c5cfe8; }
 
 .img-pan-body {
-  min-height: 220px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: repeating-conic-gradient(#e8e4de 0% 25%, #eeece8 0% 50%) 0 0/16px 16px;
+  min-height: 220px; display: flex; align-items: center; justify-content: center;
+  background: repeating-conic-gradient(#e8e4de 0% 25%, #eeece8 0% 50%) 0 0/16px 16px; position: relative;
 }
-
 .img-pan-body img { max-width: 100%; max-height: 280px; object-fit: contain; display: block; }
 
+/* Describe panel */
+.describe-panel { display: none; margin-top: 22px; }
+.describe-panel.show { display: block; }
+.describe-box {
+  background: var(--off); border: 1px solid var(--gold-border);
+  border-radius: 12px; padding: 22px 24px; position: relative;
+}
+.describe-box::before { content: '✦'; position: absolute; top: 16px; right: 18px; color: var(--gold); font-size: 14px; }
+.describe-eyebrow { font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; }
+.describe-text { font-size: 14px; color: var(--text); line-height: 1.7; }
+.describe-meta { display: flex; gap: 12px; margin-top: 14px; flex-wrap: wrap; }
+.describe-tag {
+  font-size: 11px; padding: 4px 10px; border-radius: 100px;
+  background: var(--gold-light); color: #8a6520; border: 1px solid var(--gold-border);
+  font-family: 'Syne', sans-serif; font-weight: 600; letter-spacing: 0.3px;
+}
+
+/* Buttons */
 .proc-row { display: flex; gap: 12px; margin-top: 18px; }
 
 .proc-btn {
-  flex: 1;
-  background: var(--text);
-  color: var(--white);
-  border: none;
-  padding: 15px;
-  border-radius: 10px;
-  font-family: 'Syne', sans-serif;
-  font-size: 14px;
-  font-weight: 700;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 9px;
-  transition: all 0.2s;
+  flex: 1; background: var(--text); color: var(--white); border: none;
+  padding: 15px; border-radius: 10px; font-family: 'Syne', sans-serif;
+  font-size: 14px; font-weight: 700; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 9px; transition: all 0.2s;
 }
-
 .proc-btn:hover:not(:disabled) { background: #162d58; transform: translateY(-1px); box-shadow: 0 6px 24px rgba(13,31,60,0.22); }
 .proc-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
 
-.proc-spin {
-  width: 15px; height: 15px;
-  border: 2px solid rgba(255,255,255,0.3);
-  border-top-color: #fff;
-  border-radius: 50%;
-  animation: spin 0.6s linear infinite;
-  display: none;
-}
-
+.proc-spin { width: 15px; height: 15px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.6s linear infinite; display: none; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
 .dl-btn {
-  background: var(--gold);
-  color: var(--text);
-  border: none;
-  padding: 15px 18px;
-  border-radius: 10px;
-  font-family: 'Syne', sans-serif;
-  font-size: 13px;
-  font-weight: 700;
-  text-decoration: none;
-  display: none;
-  align-items: center;
-  gap: 6px;
-  white-space: nowrap;
-  transition: all 0.2s;
+  background: var(--gold); color: var(--text); border: none;
+  padding: 15px 18px; border-radius: 10px; font-family: 'Syne', sans-serif;
+  font-size: 13px; font-weight: 700; text-decoration: none;
+  display: none; align-items: center; gap: 6px; white-space: nowrap; transition: all 0.2s;
 }
-
 .dl-btn:hover { background: #b8943e; transform: translateY(-1px); }
 .dl-btn.show { display: flex; }
 
 .err-bar { display: none; background: #fdf0f0; border: 1px solid #f0c0c0; color: var(--red); padding: 12px 15px; border-radius: 8px; font-size: 13px; margin-top: 13px; }
 .err-bar.show { display: block; }
 
-.log-box { display: none !important; }
-
-/* Features section bg */
+/* Features section */
 #features {
   background: linear-gradient(180deg, #ffffff 0%, #f0f3f8 100%);
   max-width: 100%;
   padding: 96px max(48px, calc((100vw - 1200px)/2 + 48px));
   border-top: 1px solid var(--border);
 }
-
 .feat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; margin-top: 56px; }
-.feat-card { padding: 28px; border: 1px solid var(--border); border-radius: 13px; transition: box-shadow 0.2s, border-color 0.2s; border-left: 3px solid transparent; }
+.feat-card { padding: 28px; border: 1px solid var(--border); border-radius: 13px; transition: box-shadow 0.2s, border-left-color 0.2s; border-left: 3px solid transparent; }
 .feat-card:hover { box-shadow: 0 6px 28px rgba(13,31,60,0.09); border-left-color: var(--gold); }
 .feat-ico { font-size: 26px; margin-bottom: 14px; display: block; }
-.feat-card h3 { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; margin-bottom: 8px; color: var(--text); }
+.feat-card h3 { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; margin-bottom: 8px; }
 .feat-card p { font-size: 14px; color: var(--muted); line-height: 1.65; }
 
-/* CTA band */
+/* CTA */
 .cta-band {
-  background: var(--text);
-  margin: 0 48px 96px;
-  border-radius: 22px;
-  padding: 72px 60px;
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 48px;
-  align-items: center;
-  position: relative;
-  overflow: hidden;
+  background: var(--text); margin: 0 48px 96px; border-radius: 22px;
+  padding: 72px 60px; display: grid; grid-template-columns: 1fr auto;
+  gap: 48px; align-items: center; position: relative; overflow: hidden;
 }
-
 .cta-band::before {
-  content: '';
-  position: absolute;
-  top: -60px; right: -60px;
+  content: ''; position: absolute; top: -60px; right: -60px;
   width: 260px; height: 260px;
   background: radial-gradient(circle, rgba(201,168,76,0.12) 0%, transparent 70%);
   pointer-events: none;
 }
-
-.cta-band h2 {
-  font-family: 'Instrument Serif', serif;
-  font-size: clamp(30px, 4vw, 46px);
-  color: var(--white);
-  line-height: 1.1;
-  letter-spacing: -0.5px;
-}
-
-.cta-band h2 em { font-style: italic; color: var(--gold); opacity: 1; }
+.cta-band h2 { font-family: 'Instrument Serif', serif; font-size: clamp(30px, 4vw, 46px); color: var(--white); line-height: 1.1; letter-spacing: -0.5px; }
+.cta-band h2 em { font-style: italic; color: var(--gold); }
 .cta-band p { color: rgba(255,255,255,0.5); font-size: 15px; margin-top: 10px; font-weight: 300; }
-
-.btn-white {
-  background: var(--gold);
-  color: var(--text);
-  padding: 15px 30px;
-  border-radius: 9px;
-  font-family: 'Syne', sans-serif;
-  font-size: 15px;
-  font-weight: 700;
-  border: none;
-  cursor: pointer;
-  white-space: nowrap;
-  transition: all 0.2s;
-}
-
-.btn-white:hover { background: #b8943e; transform: translateY(-1px); }
+.btn-gold { background: var(--gold); color: var(--text); padding: 15px 30px; border-radius: 9px; font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; border: none; cursor: pointer; white-space: nowrap; transition: all 0.2s; }
+.btn-gold:hover { background: #b8943e; transform: translateY(-1px); }
 
 /* Footer */
-footer {
-  background: var(--text);
-  border-top: 1px solid rgba(201,168,76,0.2);
-  padding: 44px 48px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
+footer { background: var(--text); border-top: 1px solid rgba(201,168,76,0.2); padding: 44px 48px; display: flex; align-items: center; justify-content: space-between; }
 .foot-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 17px; color: var(--white); text-decoration: none; }
 .foot-links { display: flex; gap: 26px; list-style: none; }
 .foot-links a { font-size: 13px; color: rgba(255,255,255,0.4); text-decoration: none; transition: color 0.2s; cursor: pointer; }
 .foot-links a:hover { color: var(--gold); }
 .foot-copy { font-size: 13px; color: rgba(255,255,255,0.25); }
 
-/* ═══════════════════════════════════════
-   AUTH PAGE
-═══════════════════════════════════════ */
-#auth-page {
-  min-height: 100vh;
-  display: none;
-  grid-template-columns: 45% 1fr;
-}
-
+/* ── AUTH PAGE ── */
+#auth-page { min-height: 100vh; display: none; grid-template-columns: 45% 1fr; }
 #auth-page.active { display: grid; }
 
-/* Left branding panel */
-.auth-left {
-  background: var(--text);
-  padding: 48px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  position: sticky;
-  top: 0;
-  height: 100vh;
-}
-
-.auth-left-logo {
-  font-family: 'Syne', sans-serif;
-  font-weight: 800;
-  font-size: 20px;
-  color: var(--white);
-  cursor: pointer;
-  letter-spacing: -0.5px;
-}
-
-.auth-left-logo-dot {
-  display: inline-block;
-  width: 7px; height: 7px;
-  background: rgba(255,255,255,0.35);
-  border-radius: 50%;
-  margin-left: 3px;
-  vertical-align: middle;
-  margin-bottom: 3px;
-}
-
+.auth-left { background: var(--text); padding: 48px; display: flex; flex-direction: column; justify-content: space-between; position: sticky; top: 0; height: 100vh; }
+.auth-left-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 20px; color: var(--white); cursor: pointer; letter-spacing: -0.5px; }
+.auth-left-logo-dot { display: inline-block; width: 7px; height: 7px; background: rgba(255,255,255,0.35); border-radius: 50%; margin-left: 3px; vertical-align: middle; margin-bottom: 3px; }
 .auth-mid { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 40px 0; }
-
-.auth-mid h2 {
-  font-family: 'Instrument Serif', serif;
-  font-size: clamp(36px, 4vw, 54px);
-  color: var(--white);
-  line-height: 1.06;
-  letter-spacing: -1px;
-  margin-bottom: 18px;
-}
-
-.auth-mid h2 em { font-style: italic; color: var(--gold); opacity: 1; }
+.auth-mid h2 { font-family: 'Instrument Serif', serif; font-size: clamp(36px, 4vw, 54px); color: var(--white); line-height: 1.06; letter-spacing: -1px; margin-bottom: 18px; }
+.auth-mid h2 em { font-style: italic; color: var(--gold); }
 .auth-mid p { font-size: 15px; color: rgba(255,255,255,0.48); font-weight: 300; line-height: 1.7; max-width: 320px; margin-bottom: 36px; }
-
 .auth-perks { display: flex; flex-direction: column; gap: 10px; }
-
-.perk {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  background: rgba(201,168,76,0.08);
-  border: 1px solid rgba(201,168,76,0.2);
-  border-radius: 10px;
-  padding: 13px 16px;
-}
-
+.perk { display: flex; align-items: center; gap: 12px; background: rgba(201,168,76,0.08); border: 1px solid rgba(201,168,76,0.2); border-radius: 10px; padding: 13px 16px; }
 .perk-ico { font-size: 18px; flex-shrink: 0; }
 .perk-text { font-size: 13px; color: rgba(255,255,255,0.65); line-height: 1.4; }
 .perk-text strong { color: var(--gold); display: block; font-size: 13px; margin-bottom: 1px; }
-
 .auth-left-foot { font-size: 11px; color: rgba(255,255,255,0.25); }
 
-/* Right form panel */
-.auth-right {
-  background: var(--white);
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 80px 64px;
-}
-
-/* Tabs */
-.auth-tabs {
-  display: flex;
-  background: var(--off);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 4px;
-  margin-bottom: 36px;
-}
-
-.auth-tab {
-  flex: 1;
-  padding: 10px;
-  text-align: center;
-  font-family: 'Syne', sans-serif;
-  font-size: 14px;
-  font-weight: 600;
-  border-radius: 7px;
-  cursor: pointer;
-  border: none;
-  background: transparent;
-  color: var(--muted);
-  transition: all 0.18s;
-}
-
+.auth-right { background: var(--white); overflow-y: auto; display: flex; flex-direction: column; justify-content: center; padding: 80px 64px; }
+.auth-tabs { display: flex; background: var(--off); border: 1px solid var(--border); border-radius: 10px; padding: 4px; margin-bottom: 36px; }
+.auth-tab { flex: 1; padding: 10px; text-align: center; font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 600; border-radius: 7px; cursor: pointer; border: none; background: transparent; color: var(--muted); transition: all 0.18s; }
 .auth-tab.active { background: var(--white); color: var(--text); box-shadow: 0 1px 6px rgba(0,0,0,0.09); border-bottom: 2px solid var(--gold); }
-
-/* Message */
 .auth-msg { display: none; padding: 11px 15px; border-radius: 8px; font-size: 13px; margin-bottom: 18px; }
-.auth-msg.ok { background: var(--green-light); color: var(--green); border: 1px solid #c3e6d2; display: block; }
+.auth-msg.ok { background: var(--gold-light); color: #8a6520; border: 1px solid var(--gold-border); display: block; }
 .auth-msg.err { background: #fdf0f0; color: var(--red); border: 1px solid #f0c0c0; display: block; }
-
 .form-title { font-family: 'Instrument Serif', serif; font-size: 30px; letter-spacing: -0.5px; margin-bottom: 5px; }
 .form-sub { font-size: 14px; color: var(--muted); margin-bottom: 28px; }
-
-/* Social */
 .socials { display: flex; gap: 10px; margin-bottom: 24px; }
-
-.social-btn {
-  flex: 1;
-  padding: 11px;
-  border: 1px solid var(--border);
-  border-radius: 9px;
-  background: var(--white);
-  cursor: pointer;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--text);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 7px;
-  transition: all 0.18s;
-}
-
-.social-btn:hover { border-color: var(--text); background: var(--off); }
+.social-btn { flex: 1; padding: 11px; border: 1px solid var(--border); border-radius: 9px; background: var(--white); cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; color: var(--text); display: flex; align-items: center; justify-content: center; gap: 7px; transition: all 0.18s; }
+.social-btn:hover { border-color: var(--gold); background: var(--gold-light); }
 .social-btn svg { width: 17px; height: 17px; }
-
-.divider {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 24px;
-  color: var(--mid);
-  font-size: 12px;
-}
-
+.divider { display: flex; align-items: center; gap: 10px; margin-bottom: 24px; color: var(--mid); font-size: 12px; }
 .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
-
-/* Fields */
 .field { margin-bottom: 16px; }
 .field label { display: block; font-size: 13px; font-weight: 500; margin-bottom: 6px; }
-
-.field input {
-  width: 100%;
-  padding: 12px 15px;
-  border: 1px solid var(--border);
-  border-radius: 9px;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 14px;
-  color: var(--text);
-  background: var(--white);
-  outline: none;
-  transition: border-color 0.18s, box-shadow 0.18s;
-}
-
+.field input { width: 100%; padding: 12px 15px; border: 1px solid var(--border); border-radius: 9px; font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--text); background: var(--white); outline: none; transition: border-color 0.18s, box-shadow 0.18s; }
 .field input:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(201,168,76,0.15); }
 .field input::placeholder { color: var(--mid); }
-
 .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-
 .forgot-wrap { display: flex; justify-content: flex-end; margin-top: -8px; margin-bottom: 18px; }
 .forgot { font-size: 12px; color: var(--muted); cursor: pointer; transition: color 0.2s; }
 .forgot:hover { color: var(--gold); }
-
 .pw-bar { height: 3px; background: var(--border); border-radius: 3px; margin-top: 6px; overflow: hidden; }
 .pw-fill { height: 100%; width: 0; border-radius: 3px; transition: all 0.28s; }
-
 .terms-check { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 22px; }
 .terms-check input { width: 15px; height: 15px; margin-top: 2px; flex-shrink: 0; accent-color: var(--gold); }
 .terms-check label { font-size: 13px; color: var(--muted); line-height: 1.5; }
 .terms-check a { color: var(--gold); text-decoration: underline; }
-
-.submit-btn {
-  width: 100%;
-  padding: 14px;
-  background: var(--gold);
-  color: var(--text);
-  border: none;
-  border-radius: 10px;
-  font-family: 'Syne', sans-serif;
-  font-size: 15px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
+.submit-btn { width: 100%; padding: 14px; background: var(--gold); color: var(--text); border: none; border-radius: 10px; font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; cursor: pointer; transition: all 0.2s; }
 .submit-btn:hover { background: #b8943e; }
-
 .switch-txt { text-align: center; margin-top: 20px; font-size: 13px; color: var(--muted); }
 .switch-txt button { background: none; border: none; color: var(--gold); font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 13px; text-decoration: underline; }
 
-/* ─── RESPONSIVE ─── */
+/* ── RESPONSIVE ── */
 @media (max-width: 1024px) {
   #auth-page.active { grid-template-columns: 1fr; }
   .auth-left { display: none; }
   .auth-right { padding: 100px 28px 60px; }
 }
-
 @media (max-width: 900px) {
   nav { padding: 0 20px; }
   .nav-center { display: none; }
   .btn-nav-login { display: none; }
-  .hero { grid-template-columns: 1fr; padding: 110px 24px 56px; gap: 0; }
+  .hero { grid-template-columns: 1fr; padding: 110px 24px 56px; }
   .hero > div:first-child { padding: 0 0 40px 0; }
   .hero > div:last-child { padding: 40px 0 0 0; border-left: none; border-top: 1px solid rgba(201,168,76,0.15); height: auto; }
   .section { padding: 60px 24px; }
   .tool-inner { padding: 60px 24px; }
   #features { padding: 60px 24px; }
   .how-grid, .feat-grid { grid-template-columns: 1fr; }
+  .mode-tabs { flex-direction: column; }
   .cta-band { grid-template-columns: 1fr; margin: 0 20px 64px; padding: 44px 28px; gap: 20px; }
   footer { flex-direction: column; gap: 20px; padding: 32px 24px; text-align: center; }
   .foot-links { flex-wrap: wrap; justify-content: center; }
   .comp.show { grid-template-columns: 1fr; }
-  .api-row { flex-wrap: wrap; }
   .user-dropdown { right: 20px; }
-  #how .section { padding: 60px 24px; }
 }
-
 canvas { display: none; }
 </style>
 </head>
 <body>
 
-<!-- ══════════════ SHARED NAV ══════════════ -->
+<!-- ══ NAV ══ -->
 <nav>
-  <span class="nav-logo" onclick="goHome()"><span style="color:var(--gold)">AUTO</span>PIVOT<span class="nav-logo-dot"></span></span>
-
+  <span class="nav-logo" onclick="goHome()">
+    <span style="color:var(--gold)">AUTO</span>PIVOT<span class="nav-logo-dot"></span>
+  </span>
   <ul class="nav-center">
     <li><a onclick="navTo('how')">How it works</a></li>
     <li><a onclick="navTo('tool')">Try it free</a></li>
     <li><a onclick="navTo('features')">Features</a></li>
   </ul>
-
   <div class="nav-right">
-    <!-- Guest buttons -->
-    <div id="guestBtns">
+    <div id="guestBtns" style="display:flex;gap:8px">
       <button class="btn-nav-login" onclick="openAuth('login')">Log in</button>
       <button class="btn-nav-signup" onclick="openAuth('signup')">Sign up free →</button>
     </div>
-
-    <!-- Logged-in chip -->
     <div class="nav-user-chip" id="userChip" onclick="toggleDrop()">
       <div class="chip-avatar" id="chipInitials">SP</div>
       <span class="chip-name" id="chipName">Suraj</span>
@@ -1023,10 +550,9 @@ canvas { display: none; }
   </div>
 </nav>
 
-<!-- User dropdown -->
 <div class="user-dropdown" id="userDrop">
   <div class="dropdown-head">
-    <div class="dropdown-head-name" id="dropName" style="color:var(--text)">Suraj Purella</div>
+    <div class="dropdown-head-name" id="dropName">Suraj Purella</div>
     <div class="dropdown-head-email" id="dropEmail">suraj@example.com</div>
   </div>
   <div class="dropdown-item" onclick="goHome()">🏠 Home</div>
@@ -1035,23 +561,22 @@ canvas { display: none; }
   <div class="dropdown-item danger" onclick="doLogout()">→ Sign out</div>
 </div>
 
-
-<!-- ══════════════ HOME PAGE ══════════════ -->
+<!-- ══ HOME PAGE ══ -->
 <div id="home-page" class="page active">
 
 <!-- Hero -->
 <section class="hero">
   <div>
-    <div class="hero-badge">Gemini Vision Powered</div>
-    <h1>Vehicle privacy<br><em>made effortless.</em></h1>
-    <p>Upload any car photo. Our AI detects and hides the number plate automatically — protecting your privacy before you publish your listing.</p>
+    <div class="hero-badge">In-browser AI · No uploads · 100% Private</div>
+    <h1>Vehicle imaging,<br><em>reimagined.</em></h1>
+    <p>Remove backgrounds and hide number plates with cutting-edge AI — all processing happens locally in your browser. Your photos never leave your device.</p>
     <div class="hero-actions">
-      <a class="btn-primary" onclick="scrollTo('tool')">Try it free →</a>
-      <a class="btn-ghost" onclick="scrollTo('how')">See how it works ↓</a>
+      <a class="btn-primary" onclick="navTo('tool')">Try it free →</a>
+      <a class="btn-ghost" onclick="navTo('how')">See how it works ↓</a>
     </div>
     <div class="hero-stats">
-      <div><div class="stat-num">2s</div><div class="stat-label">Average processing</div></div>
-      <div><div class="stat-num">99%</div><div class="stat-label">Detection accuracy</div></div>
+      <div><div class="stat-num">100%</div><div class="stat-label">Private & local</div></div>
+      <div><div class="stat-num">2</div><div class="stat-label">AI tools in one</div></div>
       <div><div class="stat-num">Free</div><div class="stat-label">No account needed</div></div>
     </div>
   </div>
@@ -1059,15 +584,15 @@ canvas { display: none; }
     <div class="hero-card">
       <div class="hero-card-bar">
         <div class="hero-dots"><span></span><span></span><span></span></div>
-        <span class="hero-card-label">Plate Privacy Tool</span>
-        <span style="font-size:11px;color:var(--mid)">gemini-2.0-flash</span>
+        <span class="hero-card-label">AutoPivot Studio</span>
+        <span style="font-size:11px;color:rgba(255,255,255,0.4)">RMBG-1.4 · Gemini Vision</span>
       </div>
       <div class="hero-img">
         <div class="hero-placeholder">
           <svg viewBox="0 0 64 64" fill="none"><rect x="8" y="20" width="48" height="28" rx="4" stroke="currentColor" stroke-width="2"/><rect x="14" y="36" width="10" height="6" rx="1.5" fill="currentColor" opacity="0.4"/><rect x="40" y="36" width="10" height="6" rx="1.5" fill="currentColor" opacity="0.4"/><circle cx="16" cy="48" r="4" stroke="currentColor" stroke-width="2"/><circle cx="48" cy="48" r="4" stroke="currentColor" stroke-width="2"/><path d="M20 20 L26 12 H38 L44 20" stroke="currentColor" stroke-width="2"/></svg>
-          <p>Your vehicle photo</p>
+          <p>Upload your vehicle photo</p>
         </div>
-        <div class="plate-chip"><div class="plate-chip-dot"></div>Plate hidden · Privacy protected</div>
+        <div class="plate-chip"><div class="plate-chip-dot"></div>Background removed · Plate hidden</div>
       </div>
     </div>
   </div>
@@ -1076,57 +601,98 @@ canvas { display: none; }
 <!-- Ticker -->
 <div class="ticker-wrap">
   <div class="ticker-track">
+    <span class="ticker-item">✂️ Background Removal<span class="tdot"></span></span>
     <span class="ticker-item">🔒 Number Plate Detection<span class="tdot"></span></span>
-    <span class="ticker-item">✦ Gemini 2.0 Flash Vision<span class="tdot"></span></span>
-    <span class="ticker-item">⚡ 2 Second Processing<span class="tdot"></span></span>
+    <span class="ticker-item">🧠 RMBG-1.4 Model<span class="tdot"></span></span>
+    <span class="ticker-item">✦ Gemini Vision AI<span class="tdot"></span></span>
+    <span class="ticker-item">🔐 100% Private — In-Browser<span class="tdot"></span></span>
     <span class="ticker-item">🚗 Any Vehicle Type<span class="tdot"></span></span>
     <span class="ticker-item">📸 Instant Download<span class="tdot"></span></span>
-    <span class="ticker-item">🔐 Privacy First<span class="tdot"></span></span>
     <span class="ticker-item">🌏 Australian Plates Supported<span class="tdot"></span></span>
-    <span class="ticker-item">✦ No Account Required<span class="tdot"></span></span>
+    <span class="ticker-item">✂️ Background Removal<span class="tdot"></span></span>
     <span class="ticker-item">🔒 Number Plate Detection<span class="tdot"></span></span>
-    <span class="ticker-item">✦ Gemini 2.0 Flash Vision<span class="tdot"></span></span>
-    <span class="ticker-item">⚡ 2 Second Processing<span class="tdot"></span></span>
+    <span class="ticker-item">🧠 RMBG-1.4 Model<span class="tdot"></span></span>
+    <span class="ticker-item">✦ Gemini Vision AI<span class="tdot"></span></span>
+    <span class="ticker-item">🔐 100% Private — In-Browser<span class="tdot"></span></span>
     <span class="ticker-item">🚗 Any Vehicle Type<span class="tdot"></span></span>
     <span class="ticker-item">📸 Instant Download<span class="tdot"></span></span>
-    <span class="ticker-item">🔐 Privacy First<span class="tdot"></span></span>
     <span class="ticker-item">🌏 Australian Plates Supported<span class="tdot"></span></span>
-    <span class="ticker-item">✦ No Account Required<span class="tdot"></span></span>
   </div>
 </div>
 
 <!-- How it works -->
 <div id="how"><div class="section">
   <div class="eyebrow">How it works</div>
-  <div class="sec-title">Three steps to <em>total privacy.</em></div>
+  <div class="sec-title">Three tools, <em>one platform.</em></div>
   <div class="how-grid">
-    <div class="how-card"><div class="how-num">01 —</div><div class="how-icon">📤</div><h3>Upload your photo</h3><p>Drop any JPG, PNG or WEBP car photo. Dashcam shot, phone snap, or professional image — it all works.</p></div>
-    <div class="how-card"><div class="how-num">02 —</div><div class="how-icon">🔍</div><h3>Gemini detects the plate</h3><p>Google's Gemini 2.0 Flash Vision analyses the image and pinpoints the exact number plate coordinates with high precision.</p></div>
-    <div class="how-card"><div class="how-num">03 —</div><div class="how-icon">⬇️</div><h3>Download protected image</h3><p>The plate is blurred with a mosaic effect and you can instantly download the privacy-protected PNG.</p></div>
+    <div class="how-card">
+      <div class="how-num">01 —</div>
+      <div class="how-icon">📤</div>
+      <h3>Upload your photo</h3>
+      <p>Drop any JPG, PNG or WEBP vehicle photo. Your image stays entirely in your browser — nothing is sent to any server.</p>
+    </div>
+    <div class="how-card">
+      <div class="how-num">02 —</div>
+      <div class="how-icon">🧠</div>
+      <h3>AI processes instantly</h3>
+      <p>Choose your tool: RMBG-1.4 removes backgrounds in-browser with zero uploads. Gemini Vision detects and blurs number plates. Or get an AI description of your vehicle.</p>
+    </div>
+    <div class="how-card">
+      <div class="how-num">03 —</div>
+      <div class="how-icon">⬇️</div>
+      <h3>Download your result</h3>
+      <p>Get your processed image as a full-resolution PNG instantly, ready for Carsales, Facebook Marketplace, or Gumtree.</p>
+    </div>
   </div>
 </div></div>
 
 <!-- Tool -->
 <div class="tool-band" id="tool"><div class="tool-inner">
   <div class="tool-head">
-    <div class="eyebrow">Free tool · No sign-up</div>
-    <div class="sec-title">Hide your <em>number plate</em> now.</div>
-    <p style="margin-top:14px">Upload your vehicle photo and our AI will automatically detect and blur the number plate instantly.</p>
+    <div class="eyebrow">AI Studio · Three tools in one</div>
+    <div class="sec-title">Process your <em>vehicle photos.</em></div>
+    <p style="margin-top:14px">Background removal runs 100% locally in your browser via RMBG-1.4. Plate detection and AI descriptions use Gemini Vision.</p>
   </div>
 
+  <!-- Mode tabs -->
+  <div class="mode-tabs" id="modeTabs">
+    <button class="mode-tab active" data-mode="bg" onclick="switchMode('bg', this)">
+      <span class="mode-tab-icon">✂️</span> Remove Background
+    </button>
+    <button class="mode-tab" data-mode="plate" onclick="switchMode('plate', this)">
+      <span class="mode-tab-icon">🔒</span> Hide Number Plate
+    </button>
+    <button class="mode-tab" data-mode="describe" onclick="switchMode('describe', this)">
+      <span class="mode-tab-icon">✦</span> AI Description
+    </button>
+  </div>
+
+  <!-- Tool card -->
   <div class="tool-card">
     <div class="tool-card-top">
-      <h3>Number Plate Privacy</h3>
-      <div class="gem-pill">Gemini 2.0 Flash Vision</div>
+      <h3 id="cardTitle">Remove Vehicle Background</h3>
+      <div class="ai-pill" id="aiPill">RMBG-1.4 · In-Browser</div>
     </div>
     <div class="tool-body">
+
+      <!-- Upload -->
       <div class="upload-zone" id="uploadZone">
         <input type="file" id="fileIn" accept="image/jpeg,image/png,image/webp" onchange="handleFile(event)">
         <div class="upload-icon">🚗</div>
         <h4>Drop your vehicle photo here</h4>
-        <p>JPG · PNG · WEBP — max 10MB</p>
+        <p>JPG · PNG · WEBP — max 10MB · Processed locally, never uploaded</p>
       </div>
 
+      <!-- Model loading progress -->
+      <div class="progress-wrap" id="progressWrap">
+        <div class="progress-label">
+          <span id="progressText">Loading AI model…</span>
+          <span id="progressPct">0%</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+      </div>
+
+      <!-- Image comparison -->
       <div class="comp" id="comp">
         <div class="img-pan">
           <div class="img-pan-top"><span>Original</span><span class="badge">Input</span></div>
@@ -1141,16 +707,25 @@ canvas { display: none; }
         </div>
       </div>
 
+      <!-- AI Description panel (mode = describe) -->
+      <div class="describe-panel" id="describePanel">
+        <div class="describe-box">
+          <div class="describe-eyebrow">Gemini AI Analysis</div>
+          <div class="describe-text" id="describeText">Upload a photo and click "Generate Description" to get a detailed AI-powered analysis of your vehicle.</div>
+          <div class="describe-meta" id="describeMeta"></div>
+        </div>
+      </div>
+
+      <!-- Buttons -->
       <div class="proc-row">
         <button class="proc-btn" id="procBtn" onclick="processImage()" disabled>
           <div class="proc-spin" id="spin"></div>
           <span id="procLabel">Upload an image first</span>
         </button>
-        <a class="dl-btn" id="dlBtn" download="autopivot-plate-hidden.png">⬇ Download</a>
+        <a class="dl-btn" id="dlBtn" download="autopivot-processed.png">⬇ Download</a>
       </div>
 
       <div class="err-bar" id="errBar"></div>
-      <div class="log-box" id="logBox" style="display:none!important"></div>
     </div>
   </div>
 </div></div>
@@ -1160,111 +735,98 @@ canvas { display: none; }
   <div class="eyebrow">Features</div>
   <div class="sec-title">Everything you need<br><em>before you list.</em></div>
   <div class="feat-grid">
-    <div class="feat-card"><span class="feat-ico">🎯</span><h3>Precision Detection</h3><p>Gemini Vision identifies plate regions with pixel-level accuracy, even on angled or partially visible plates.</p></div>
-    <div class="feat-card"><span class="feat-ico">🧩</span><h3>Mosaic Blur</h3><p>A dense pixelated mosaic is applied over the plate — completely unreadable, yet natural-looking in the final image.</p></div>
-    <div class="feat-card"><span class="feat-ico">🌏</span><h3>All Plate Formats</h3><p>Works with Australian, UK, European, and US-format number plates across front and rear positions.</p></div>
-    <div class="feat-card"><span class="feat-ico">🔐</span><h3>Privacy First</h3><p>Your API key stays in your browser. Images are processed via Gemini and never stored on any server.</p></div>
-    <div class="feat-card"><span class="feat-ico">⚡</span><h3>Instant Results</h3><p>Processing takes under 3 seconds. No queues, no waiting — upload and download immediately.</p></div>
-    <div class="feat-card"><span class="feat-ico">📦</span><h3>PNG Export</h3><p>Download your protected image as a full-resolution PNG, ready for Carsales, Facebook Marketplace, or Gumtree.</p></div>
+    <div class="feat-card"><span class="feat-ico">✂️</span><h3>In-Browser Background Removal</h3><p>RMBG-1.4 by BRIA AI runs entirely in your browser via Transformers.js. No image ever leaves your device — complete privacy guaranteed.</p></div>
+    <div class="feat-card"><span class="feat-ico">🔒</span><h3>Plate Privacy</h3><p>Gemini Vision detects number plates with pixel-precision. A mosaic blur is applied instantly on canvas — completely unreadable.</p></div>
+    <div class="feat-card"><span class="feat-ico">✦</span><h3>AI Car Descriptions</h3><p>Gemini analyses your vehicle photo and generates a professional listing description with make, model, colour, condition and key features.</p></div>
+    <div class="feat-card"><span class="feat-ico">🔐</span><h3>Zero Data Collection</h3><p>Background removal runs 100% locally. Gemini calls send only your image to Google's API — nothing is stored on our end, ever.</p></div>
+    <div class="feat-card"><span class="feat-ico">⚡</span><h3>Instant Results</h3><p>Background removal takes 2–5 seconds locally. Plate detection and descriptions via Gemini return in under 3 seconds.</p></div>
+    <div class="feat-card"><span class="feat-ico">📦</span><h3>PNG Export</h3><p>Download full-resolution PNGs ready for Carsales, Facebook Marketplace, Gumtree, or any car listing platform in Australia.</p></div>
   </div>
 </div>
 
 <!-- CTA -->
 <div class="cta-band">
   <div>
-    <h2>Ready to protect<br><em>your listings?</em></h2>
-    <p>Free to use. Powered by Google Gemini. No account required.</p>
+    <h2>Ready to elevate<br><em>your listings?</em></h2>
+    <p>Three AI tools. Zero cost. Powered by RMBG-1.4 and Google Gemini.</p>
   </div>
-  <button class="btn-white" onclick="openAuth('signup')">Get started free →</button>
+  <button class="btn-gold" onclick="openAuth('signup')">Get started free →</button>
 </div>
 
 <!-- Footer -->
 <footer>
   <a class="foot-logo"><span style="color:var(--gold)">AUTO</span>PIVOT</a>
   <ul class="foot-links">
-    <li><a onclick="scrollTo('how')">How it works</a></li>
-    <li><a onclick="scrollTo('tool')">Tool</a></li>
-    <li><a onclick="scrollTo('features')">Features</a></li>
+    <li><a onclick="navTo('how')">How it works</a></li>
+    <li><a onclick="navTo('tool')">Tools</a></li>
+    <li><a onclick="navTo('features')">Features</a></li>
   </ul>
-  <span class="foot-copy">Powered by Gemini Vision · © 2026 AutoPivot</span>
+  <span class="foot-copy">RMBG-1.4 · Gemini Vision · © 2026 AutoPivot</span>
 </footer>
 
 </div><!-- /home-page -->
 
-
-<!-- ══════════════ AUTH PAGE ══════════════ -->
+<!-- ══ AUTH PAGE ══ -->
 <div id="auth-page" class="page">
-
-  <!-- Left branding -->
   <div class="auth-left">
-    <span class="auth-left-logo" onclick="goHome()"><span style="color:var(--gold)">AUTO</span><span style="color:rgba(255,255,255,0.9)">PIVOT</span><span class="auth-left-logo-dot"></span></span>
+    <span class="auth-left-logo" onclick="goHome()">
+      <span style="color:var(--gold)">AUTO</span><span style="color:rgba(255,255,255,0.9)">PIVOT</span><span class="auth-left-logo-dot"></span>
+    </span>
     <div class="auth-mid">
-      <h2>Your vehicle,<br><em>your privacy.</em></h2>
-      <p>Join Australian car sellers who protect their plates before publishing listings online.</p>
+      <h2>Your vehicle,<br><em>elevated.</em></h2>
+      <p>Join Australian car sellers using AI to create stunning, private listings in seconds.</p>
       <div class="auth-perks">
-        <div class="perk"><span class="perk-ico">🔒</span><div class="perk-text"><strong>Instant plate detection</strong>Powered by Gemini 2.0 Flash Vision</div></div>
-        <div class="perk"><span class="perk-ico">⚡</span><div class="perk-text"><strong>2-second processing</strong>Upload, blur, download — done</div></div>
-        <div class="perk"><span class="perk-ico">🌏</span><div class="perk-text"><strong>All Australian plates</strong>Every state and territory supported</div></div>
+        <div class="perk"><span class="perk-ico">✂️</span><div class="perk-text"><strong>In-browser background removal</strong>RMBG-1.4 — no uploads, total privacy</div></div>
+        <div class="perk"><span class="perk-ico">🔒</span><div class="perk-text"><strong>Plate privacy protection</strong>Gemini Vision detects and blurs plates</div></div>
+        <div class="perk"><span class="perk-ico">✦</span><div class="perk-text"><strong>AI listing descriptions</strong>Professional copy generated instantly</div></div>
       </div>
     </div>
     <p class="auth-left-foot">© 2026 AutoPivot · Privacy Policy · Terms</p>
   </div>
-
-  <!-- Right form -->
   <div class="auth-right">
     <div class="auth-tabs">
       <button class="auth-tab active" id="tabLogin" onclick="switchTab('login')">Log in</button>
       <button class="auth-tab" id="tabSignup" onclick="switchTab('signup')">Create account</button>
     </div>
-
     <div class="auth-msg" id="authMsg"></div>
 
-    <!-- LOGIN FORM -->
+    <!-- Login -->
     <div id="loginForm">
       <h2 class="form-title">Welcome back.</h2>
       <p class="form-sub">Sign in to your AutoPivot account.</p>
-
       <div class="socials">
         <button class="social-btn" onclick="socialDemo('Google')">
           <svg viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
           Continue with Google
         </button>
         <button class="social-btn" onclick="socialDemo('Apple')">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98l-.09.06c-.22.14-2.18 1.27-2.16 3.8.03 3.02 2.65 4.03 2.68 4.04l-.07.28zM13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-.22.14-2.18 1.27-2.16 3.8.03 3.02 2.65 4.03 2.68 4.04l-.07.28zM13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
           Apple
         </button>
       </div>
-
       <div class="divider">or continue with email</div>
-
       <div class="field"><label>Email address</label><input type="email" id="loginEmail" placeholder="you@example.com" autocomplete="email"></div>
       <div class="field"><label>Password</label><input type="password" id="loginPw" placeholder="Your password" autocomplete="current-password"></div>
-
       <div class="forgot-wrap"><span class="forgot" onclick="showMsg('ok','Password reset link sent! Check your email.')">Forgot password?</span></div>
-
       <button class="submit-btn" onclick="doLogin()">Log in →</button>
-
       <p class="switch-txt">Don't have an account? <button onclick="switchTab('signup')">Create one free</button></p>
     </div>
 
-    <!-- SIGNUP FORM -->
+    <!-- Signup -->
     <div id="signupForm" style="display:none">
       <h2 class="form-title">Create account.</h2>
       <p class="form-sub">Join AutoPivot — completely free.</p>
-
       <div class="socials">
         <button class="social-btn" onclick="socialDemo('Google')">
           <svg viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
           Continue with Google
         </button>
         <button class="social-btn" onclick="socialDemo('Apple')">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98l-.09.06c-.22.14-2.18 1.27-2.16 3.8.03 3.02 2.65 4.03 2.68 4.04l-.07.28zM13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-.22.14-2.18 1.27-2.16 3.8.03 3.02 2.65 4.03 2.68 4.04l-.07.28zM13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
           Apple
         </button>
       </div>
-
       <div class="divider">or continue with email</div>
-
       <div class="field-row">
         <div class="field"><label>First name</label><input type="text" id="signupFirst" placeholder="Suraj" autocomplete="given-name"></div>
         <div class="field"><label>Last name</label><input type="text" id="signupLast" placeholder="Purella" autocomplete="family-name"></div>
@@ -1275,184 +837,92 @@ canvas { display: none; }
         <input type="password" id="signupPw" placeholder="Min. 8 characters" autocomplete="new-password" oninput="pwStrength(this.value)">
         <div class="pw-bar"><div class="pw-fill" id="pwFill"></div></div>
       </div>
-
       <div class="terms-check">
         <input type="checkbox" id="termsChk">
         <label for="termsChk">I agree to AutoPivot's <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></label>
       </div>
-
       <button class="submit-btn" onclick="doSignup()">Create free account →</button>
-
       <p class="switch-txt">Already have an account? <button onclick="switchTab('login')">Log in</button></p>
     </div>
   </div>
-</div><!-- /auth-page -->
+</div>
 
 <canvas id="canvas"></canvas>
 
-<script>
-// ─── ROUTING ──────────────────────────────────────────────
-function goHome() {
+<script type="module">
+// ── Hardcoded Gemini key ─────────────────────────────────
+const GEMINI_KEY = 'AIzaSyACCWwQ_8P8zXLLKH50yirmTN_-UKIuR00';
+
+// ── State ────────────────────────────────────────────────
+let currentFile = null, origURL = null;
+let currentMode = 'bg'; // 'bg' | 'plate' | 'describe'
+let bgPipeline = null;
+let bgModelLoading = false;
+
+// ── Page routing ─────────────────────────────────────────
+window.goHome = function() {
   document.getElementById('home-page').classList.add('active');
   document.getElementById('auth-page').classList.remove('active');
   document.getElementById('auth-page').style.display = '';
   window.scrollTo({ top: 0, behavior: 'smooth' });
-}
+};
 
-function navTo(id) {
-  // If on auth page, switch to home first then scroll
-  const isAuthActive = document.getElementById('auth-page').classList.contains('active');
-  if (isAuthActive) {
-    goHome();
-    setTimeout(() => scrollToSection(id), 120);
-  } else {
-    scrollToSection(id);
-  }
-}
+window.navTo = function(id) {
+  const isAuth = document.getElementById('auth-page').classList.contains('active');
+  if (isAuth) { goHome(); setTimeout(() => scrollSec(id), 120); }
+  else scrollSec(id);
+};
 
-function scrollToSection(id) {
+function scrollSec(id) {
   const el = document.getElementById(id);
   if (!el) return;
-  const top = el.getBoundingClientRect().top + window.scrollY - 72;
-  window.scrollTo({ top, behavior: 'smooth' });
+  window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 75, behavior: 'smooth' });
 }
 
-function openAuth(tab) {
+window.openAuth = function(tab) {
   document.getElementById('home-page').classList.remove('active');
   document.getElementById('auth-page').style.display = 'grid';
   document.getElementById('auth-page').classList.add('active');
-  switchTab(tab);
-  clearMsg();
+  switchTab(tab); clearMsg();
   window.scrollTo({ top: 0, behavior: 'instant' });
+};
+
+window.goTool = function() { goHome(); closeDrop(); setTimeout(() => scrollSec('tool'), 120); };
+
+// ── Mode switching ────────────────────────────────────────
+const modeConfig = {
+  bg:       { title: 'Remove Vehicle Background',   pill: 'RMBG-1.4 · In-Browser',   btn: 'Remove Background' },
+  plate:    { title: 'Hide Number Plate',            pill: 'Gemini Vision AI',         btn: 'Hide Number Plate' },
+  describe: { title: 'Generate AI Description',      pill: 'Gemini Vision AI',         btn: 'Generate Description' },
+};
+
+window.switchMode = function(mode, el) {
+  currentMode = mode;
+  document.querySelectorAll('.mode-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('cardTitle').textContent = modeConfig[mode].title;
+  document.getElementById('aiPill').textContent = '';
+  document.getElementById('aiPill').innerHTML = '✦ ' + modeConfig[mode].pill;
+  // show/hide panels
+  const showComp = (mode === 'bg' || mode === 'plate') && currentFile;
+  document.getElementById('comp').classList.toggle('show', showComp);
+  document.getElementById('describePanel').classList.toggle('show', mode === 'describe' && !!currentFile);
+  document.getElementById('dlBtn').classList.remove('show');
+  resetProcBtn();
+};
+
+function resetProcBtn() {
+  document.getElementById('procBtn').disabled = !currentFile;
+  document.getElementById('procLabel').textContent = currentFile ? modeConfig[currentMode].btn : 'Upload an image first';
 }
 
-function scrollTo(id) { scrollToSection(id); }
-
-function goTool() {
-  goHome();
-  closeDrop();
-  setTimeout(() => scrollToSection('tool'), 120);
-}
-
-// ─── AUTH TABS ────────────────────────────────────────────
-function switchTab(tab) {
-  const isLogin = tab === 'login';
-  document.getElementById('tabLogin').classList.toggle('active', isLogin);
-  document.getElementById('tabSignup').classList.toggle('active', !isLogin);
-  document.getElementById('loginForm').style.display = isLogin ? 'block' : 'none';
-  document.getElementById('signupForm').style.display = isLogin ? 'none' : 'block';
-  clearMsg();
-}
-
-// ─── AUTH MESSAGES ────────────────────────────────────────
-function showMsg(type, msg) {
-  const el = document.getElementById('authMsg');
-  el.textContent = (type === 'ok' ? '✓ ' : '⚠ ') + msg;
-  el.className = 'auth-msg ' + type;
-}
-
-function clearMsg() {
-  const el = document.getElementById('authMsg');
-  el.className = 'auth-msg'; el.textContent = '';
-}
-
-// ─── LOGIN ────────────────────────────────────────────────
-function doLogin() {
-  const email = document.getElementById('loginEmail').value.trim();
-  const pw    = document.getElementById('loginPw').value;
-  if (!email || !pw) { showMsg('err', 'Please fill in all fields.'); return; }
-  if (!email.includes('@')) { showMsg('err', 'Please enter a valid email address.'); return; }
-
-  const stored = JSON.parse(localStorage.getItem('ap_user') || 'null');
-  if (stored && stored.email === email && stored.pw === btoa(pw)) {
-    loginSuccess(stored);
-  } else if (!stored) {
-    showMsg('err', 'No account found. Please sign up first.');
-  } else {
-    showMsg('err', 'Incorrect email or password.');
-  }
-}
-
-// ─── SIGNUP ───────────────────────────────────────────────
-function doSignup() {
-  const first = document.getElementById('signupFirst').value.trim();
-  const last  = document.getElementById('signupLast').value.trim();
-  const email = document.getElementById('signupEmail').value.trim();
-  const pw    = document.getElementById('signupPw').value;
-  const terms = document.getElementById('termsChk').checked;
-
-  if (!first || !last) { showMsg('err', 'Please enter your full name.'); return; }
-  if (!email.includes('@')) { showMsg('err', 'Please enter a valid email address.'); return; }
-  if (pw.length < 8) { showMsg('err', 'Password must be at least 8 characters.'); return; }
-  if (!terms) { showMsg('err', 'Please agree to the Terms of Service to continue.'); return; }
-
-  const user = { first, last, email, pw: btoa(pw), initials: (first[0] + last[0]).toUpperCase() };
-  localStorage.setItem('ap_user', JSON.stringify(user));
-  loginSuccess(user);
-}
-
-function loginSuccess(user) {
-  showMsg('ok', `Welcome${user.first ? ', ' + user.first : ''}! Redirecting...`);
-  setTimeout(() => { setUserNav(user); goHome(); }, 900);
-}
-
-function socialDemo(p) { showMsg('ok', `${p} sign-in coming soon — use email for now!`); }
-
-// ─── NAV USER STATE ───────────────────────────────────────
-function setUserNav(user) {
-  document.getElementById('guestBtns').style.display = 'none';
-  const chip = document.getElementById('userChip');
-  chip.classList.add('show');
-  document.getElementById('chipInitials').textContent = user.initials || '?';
-  document.getElementById('chipName').textContent = user.first || 'Account';
-  document.getElementById('dropName').textContent = (user.first + ' ' + user.last).trim();
-  document.getElementById('dropEmail').textContent = user.email;
-}
-
-function doLogout() {
-  closeDrop();
-  document.getElementById('guestBtns').style.display = 'flex';
-  document.getElementById('userChip').classList.remove('show');
-}
-
-// ─── DROPDOWN ─────────────────────────────────────────────
-function toggleDrop() { document.getElementById('userDrop').classList.toggle('open'); }
-function closeDrop()  { document.getElementById('userDrop').classList.remove('open'); }
-
-document.addEventListener('click', e => {
-  if (!e.target.closest('#userChip') && !e.target.closest('#userDrop')) closeDrop();
-});
-
-// ─── PASSWORD STRENGTH ────────────────────────────────────
-function pwStrength(v) {
-  let s = 0;
-  if (v.length >= 8) s++;
-  if (/[A-Z]/.test(v)) s++;
-  if (/[0-9]/.test(v)) s++;
-  if (/[^A-Za-z0-9]/.test(v)) s++;
-  const fill = document.getElementById('pwFill');
-  fill.style.width = ['0%','25%','50%','75%','100%'][s];
-  fill.style.background = ['','#e74c3c','#e67e22','#f1c40f','#27ae60'][s];
-}
-
-// ─── INIT: restore session ────────────────────────────────
-(function() {
-  const u = JSON.parse(localStorage.getItem('ap_user') || 'null');
-  if (u && u.email) setUserNav(u);
-})();
-
-// ─── API KEY (hardcoded) ──────────────────────────────────
-const GEMINI_API_KEY = 'AIzaSyACCWwQ_8P8zXLLKH50yirmTN_-UKIuR00';
-
-// ─── FILE UPLOAD ─────────────────────────────────────────
-let currentFile = null, origURL = null;
-
+// ── File handling ─────────────────────────────────────────
 const zone = document.getElementById('uploadZone');
 zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag'); });
 zone.addEventListener('dragleave', () => zone.classList.remove('drag'));
 zone.addEventListener('drop', e => { e.preventDefault(); zone.classList.remove('drag'); const f = e.dataTransfer.files[0]; if (f) loadFile(f); });
 
-function handleFile(e) { const f = e.target.files[0]; if (f) loadFile(f); }
+window.handleFile = function(e) { const f = e.target.files[0]; if (f) loadFile(f); };
 
 function loadFile(f) {
   if (!f.type.startsWith('image/')) { showErr('Please upload a JPG, PNG, or WEBP image.'); return; }
@@ -1462,10 +932,13 @@ function loadFile(f) {
   r.onload = e => {
     origURL = e.target.result;
     document.getElementById('origImg').src = origURL;
-    document.getElementById('comp').classList.add('show');
-    resetOut();
-    document.getElementById('procBtn').disabled = false;
-    document.getElementById('procLabel').textContent = 'Hide Number Plate';
+    if (currentMode !== 'describe') {
+      document.getElementById('comp').classList.add('show');
+      resetOut();
+    }
+    document.getElementById('describePanel').classList.toggle('show', currentMode === 'describe');
+    document.getElementById('dlBtn').classList.remove('show');
+    resetProcBtn();
   };
   r.readAsDataURL(f);
 }
@@ -1477,139 +950,348 @@ function resetOut() {
   document.getElementById('procBadge').className = 'badge';
   document.getElementById('dlBtn').classList.remove('show');
   document.getElementById('errBar').classList.remove('show');
-  document.getElementById('logBox').innerHTML = '';
-  document.getElementById('logBox').classList.remove('show');
 }
 
 function setLoading(on) {
   document.getElementById('procBtn').disabled = on;
   document.getElementById('spin').style.display = on ? 'block' : 'none';
-  document.getElementById('procLabel').textContent = on ? 'Processing...' : 'Hide Number Plate';
+  document.getElementById('procLabel').textContent = on ? 'Processing…' : modeConfig[currentMode].btn;
 }
 
-function showErr(m) { const b = document.getElementById('errBar'); b.textContent = '⚠ ' + m; b.classList.add('show'); }
+window.showErr = function(m) { const b = document.getElementById('errBar'); b.textContent = '⚠ ' + m; b.classList.add('show'); };
 
-function log(type, msg) {
-  const box = document.getElementById('logBox'); box.classList.add('show');
-  const t = new Date().toTimeString().slice(0,8);
-  const l = document.createElement('div'); l.className = 'log-ln';
-  l.innerHTML = `<span class="lt">[${t}]</span><span class="l${type}">${msg}</span>`;
-  box.appendChild(l); box.scrollTop = box.scrollHeight;
-}
-
-async function toB64(file) {
-  return new Promise((res, rej) => {
-    const r = new FileReader();
-    r.onload = e => res(e.target.result.split(',')[1]);
-    r.onerror = rej; r.readAsDataURL(file);
-  });
-}
-
-// ─── PROCESS ─────────────────────────────────────────────
-async function processImage() {
-  const key = GEMINI_API_KEY;
+// ── PROCESS dispatcher ────────────────────────────────────
+window.processImage = async function() {
   if (!currentFile) return;
-
   document.getElementById('errBar').classList.remove('show');
   setLoading(true);
-  document.getElementById('procBadge').textContent = 'Processing';
-  document.getElementById('procBadge').className = 'badge working';
-  document.getElementById('procHint').textContent = 'AI is working...';
 
   try {
-    const b64  = await toB64(currentFile);
-    const mime = currentFile.type || 'image/jpeg';
-
-    const prompt = `You are a vehicle image analyst. Detect all number plates / license plates in this car image.
-Return ONLY valid JSON, no markdown:
-{"detected":true,"plates":[{"position":"front|rear|unknown","x_pct":<0-100>,"y_pct":<0-100>,"w_pct":<width %>,"h_pct":<height %>,"confidence":"high|medium|low"}]}
-If none visible: {"detected":false,"plates":[]}
-Be generous with bounding box margins. Values are percentages of image dimensions.`;
-
-    const res = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${key}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [{ parts: [{ inline_data: { mime_type: mime, data: b64 } }, { text: prompt }] }],
-          generationConfig: { temperature: 0.1, maxOutputTokens: 512 }
-        })
-      }
-    );
-
-    if (!res.ok) { const e = await res.json(); throw new Error(e.error?.message || `API error ${res.status}`); }
-
-    const data = await res.json();
-    const raw  = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
-
-    let parsed;
-    try { parsed = JSON.parse(raw.replace(/```json|```/g,'').trim()); }
-    catch(e) { throw new Error('Could not parse AI response. Please try again.'); }
-
-    if (!parsed.detected || !parsed.plates?.length) {
-      showErr('No number plate detected. Try a clearer photo with a visible plate.');
-      setLoading(false);
-      document.getElementById('procBadge').textContent = 'No plate found';
-      document.getElementById('procBadge').className = 'badge';
-      document.getElementById('procHint').textContent = 'No plate detected';
-      return;
-    }
-
-    const img = new Image();
-    img.onload = () => {
-      const canvas = document.getElementById('canvas');
-      canvas.width  = img.width;
-      canvas.height = img.height;
-      const ctx = canvas.getContext('2d');
-      ctx.drawImage(img, 0, 0);
-
-      parsed.plates.forEach(p => {
-        const m  = 3;
-        const x  = Math.max(0, img.width  * ((p.x_pct - m) / 100));
-        const y  = Math.max(0, img.height * ((p.y_pct - m) / 100));
-        const w  = Math.min(img.width  - x, img.width  * ((p.w_pct + m*2) / 100));
-        const h  = Math.min(img.height - y, img.height * ((p.h_pct + m*2) / 100));
-        mosaic(ctx, Math.round(x), Math.round(y), Math.round(w), Math.round(h), 12);
-      });
-
-      const url = canvas.toDataURL('image/png');
-      const pi  = document.getElementById('procImg');
-      pi.src = url; pi.style.display = 'block';
-      document.getElementById('procHint').style.display = 'none';
-      document.getElementById('procBadge').textContent = '✓ Plate hidden';
-      document.getElementById('procBadge').className = 'badge done';
-
-      const dl = document.getElementById('dlBtn');
-      dl.href = url; dl.classList.add('show');
-      setLoading(false);
-    };
-    img.src = origURL;
-
+    if (currentMode === 'bg')       await processBackground();
+    else if (currentMode === 'plate')    await processPlate();
+    else if (currentMode === 'describe') await processDescribe();
   } catch(e) {
-    showErr(e.message);
-    document.getElementById('procBadge').textContent = 'Failed';
-    document.getElementById('procBadge').className = 'badge';
-    setLoading(false);
+    showErr(e.message || 'Something went wrong. Please try again.');
   }
+  setLoading(false);
+};
+
+// ── 1. BACKGROUND REMOVAL via Transformers.js RMBG-1.4 ───
+async function processBackground() {
+  document.getElementById('procBadge').textContent = 'Processing';
+  document.getElementById('procBadge').className = 'badge working';
+  document.getElementById('procHint').textContent = 'AI is processing…';
+
+  const { AutoModel, AutoProcessor, env, RawImage } = await import('https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.1.2/dist/transformers.min.js');
+
+  // Show model load progress if first time
+  if (!bgPipeline) {
+    setProgress(0, 'Loading RMBG-1.4 model (~45MB, first time only)…');
+    env.allowLocalModels = false;
+    env.useBrowserCache = true;
+
+    const modelId = 'briaai/RMBG-1.4';
+
+    const [model, processor] = await Promise.all([
+      AutoModel.from_pretrained(modelId, {
+        config: { model_type: 'custom' },
+        progress_callback: (p) => {
+          if (p.status === 'progress') setProgress(Math.round((p.loaded/p.total)*80), 'Downloading model…');
+        }
+      }),
+      AutoProcessor.from_pretrained(modelId, {
+        config: {
+          do_normalize: true, do_pad: false, do_rescale: true, do_resize: true,
+          image_mean: [0.5,0.5,0.5], feature_extractor_type: 'ImageFeatureExtractor',
+          image_std: [1,1,1], resample: 2, rescale_factor: 0.00392156862745098,
+          size: { width: 1024, height: 1024 }
+        }
+      })
+    ]);
+    bgPipeline = { model, processor };
+    setProgress(90, 'Model ready — processing image…');
+  } else {
+    setProgress(90, 'Processing image…');
+  }
+
+  const img = await RawImage.fromURL(origURL);
+  setProgress(92, 'Running segmentation…');
+
+  const { pixel_values } = await bgPipeline.processor(img);
+  const { output } = await bgPipeline.model({ input: pixel_values });
+  setProgress(97, 'Applying mask…');
+
+  // Get mask and apply to canvas
+  const maskData = await RawImage.fromTensor(output[0].mul(255).to('uint8')).resize(img.width, img.height);
+
+  const canvas = document.getElementById('canvas');
+  canvas.width = img.width; canvas.height = img.height;
+  const ctx = canvas.getContext('2d');
+
+  // Draw original image
+  const imgEl = new Image();
+  await new Promise(res => { imgEl.onload = res; imgEl.src = origURL; });
+  ctx.drawImage(imgEl, 0, 0);
+
+  // Apply alpha mask
+  const imgData = ctx.getImageData(0, 0, img.width, img.height);
+  for (let i = 0; i < maskData.data.length; i++) {
+    imgData.data[i*4 + 3] = maskData.data[i]; // set alpha from mask
+  }
+  ctx.putImageData(imgData, 0, 0);
+
+  setProgress(100, 'Done!');
+  setTimeout(() => hideProgress(), 800);
+
+  const url = canvas.toDataURL('image/png');
+  showResult(url);
 }
 
-function mosaic(ctx, x, y, w, h, ts) {
+function setProgress(pct, label) {
+  document.getElementById('progressWrap').classList.add('show');
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressText').textContent = label;
+  document.getElementById('progressPct').textContent = pct + '%';
+}
+
+function hideProgress() {
+  document.getElementById('progressWrap').classList.remove('show');
+}
+
+// ── 2. NUMBER PLATE DETECTION via Gemini ─────────────────
+async function processPlate() {
+  document.getElementById('procBadge').textContent = 'Processing';
+  document.getElementById('procBadge').className = 'badge working';
+  document.getElementById('procHint').textContent = 'Gemini is analysing…';
+
+  const b64  = origURL.split(',')[1];
+  const mime = currentFile.type || 'image/jpeg';
+
+  const prompt = `Analyse this vehicle image and detect all number plates / license plates.
+Return ONLY valid JSON (no markdown):
+{"detected":true,"plates":[{"position":"front|rear|unknown","x_pct":<left edge 0-100>,"y_pct":<top edge 0-100>,"w_pct":<width 0-100>,"h_pct":<height 0-100>,"confidence":"high|medium|low"}]}
+If none visible: {"detected":false,"plates":[]}
+Be generous with bounding box margins. All values are percentages of image dimensions.`;
+
+  const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_KEY}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      contents: [{ parts: [{ inline_data: { mime_type: mime, data: b64 } }, { text: prompt }] }],
+      generationConfig: { temperature: 0.1, maxOutputTokens: 512 }
+    })
+  });
+
+  if (!res.ok) { const e = await res.json(); throw new Error(e.error?.message || `Gemini error ${res.status}`); }
+
+  const data = await res.json();
+  const raw  = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+
+  let parsed;
+  try { parsed = JSON.parse(raw.replace(/```json|```/g,'').trim()); }
+  catch(e) { throw new Error('Could not parse AI response. Try again.'); }
+
+  if (!parsed.detected || !parsed.plates?.length) {
+    showErr('No number plate detected. Try a photo where the plate is clearly visible.');
+    document.getElementById('procBadge').textContent = 'No plate found';
+    document.getElementById('procBadge').className = 'badge';
+    document.getElementById('procHint').textContent = 'No plate detected';
+    return;
+  }
+
+  const imgEl = new Image();
+  await new Promise(res => { imgEl.onload = res; imgEl.src = origURL; });
+
+  const canvas = document.getElementById('canvas');
+  canvas.width = imgEl.width; canvas.height = imgEl.height;
+  const ctx = canvas.getContext('2d');
+  ctx.drawImage(imgEl, 0, 0);
+
+  parsed.plates.forEach(p => {
+    const m = 3;
+    const x = Math.max(0, imgEl.width  * ((p.x_pct - m) / 100));
+    const y = Math.max(0, imgEl.height * ((p.y_pct - m) / 100));
+    const w = Math.min(imgEl.width  - x, imgEl.width  * ((p.w_pct + m*2) / 100));
+    const h = Math.min(imgEl.height - y, imgEl.height * ((p.h_pct + m*2) / 100));
+    applyMosaic(ctx, Math.round(x), Math.round(y), Math.round(w), Math.round(h), 14);
+  });
+
+  showResult(canvas.toDataURL('image/png'));
+}
+
+// ── 3. AI DESCRIPTION via Gemini ─────────────────────────
+async function processDescribe() {
+  document.getElementById('describePanel').classList.add('show');
+  document.getElementById('describeText').textContent = 'Gemini is analysing your vehicle…';
+  document.getElementById('describeMeta').innerHTML = '';
+
+  const b64  = origURL.split(',')[1];
+  const mime = currentFile.type || 'image/jpeg';
+
+  const prompt = `You are an expert automotive copywriter for car listing platforms like Carsales and Drive.com.au.
+
+Analyse this vehicle image and provide:
+1. A professional 2-3 sentence listing description (engaging, factual, suitable for Carsales)
+2. Key vehicle details you can identify
+
+Return ONLY valid JSON (no markdown):
+{
+  "description": "Professional listing description here...",
+  "make": "Toyota",
+  "model": "Camry",
+  "year_estimate": "2018-2022",
+  "colour": "Silver",
+  "body_type": "Sedan",
+  "condition": "Good",
+  "notable_features": ["Alloy wheels", "Sunroof"]
+}
+If you cannot identify details, use "Unknown" for those fields.`;
+
+  const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_KEY}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      contents: [{ parts: [{ inline_data: { mime_type: mime, data: b64 } }, { text: prompt }] }],
+      generationConfig: { temperature: 0.4, maxOutputTokens: 800 }
+    })
+  });
+
+  if (!res.ok) { const e = await res.json(); throw new Error(e.error?.message || `Gemini error ${res.status}`); }
+
+  const data = await res.json();
+  const raw  = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+
+  let parsed;
+  try { parsed = JSON.parse(raw.replace(/```json|```/g,'').trim()); }
+  catch(e) { throw new Error('Could not parse AI response. Try again.'); }
+
+  // Display description
+  document.getElementById('describeText').textContent = parsed.description || 'Description unavailable.';
+
+  // Build tags
+  const tags = [];
+  if (parsed.make && parsed.make !== 'Unknown') tags.push(parsed.make);
+  if (parsed.model && parsed.model !== 'Unknown') tags.push(parsed.model);
+  if (parsed.year_estimate && parsed.year_estimate !== 'Unknown') tags.push(parsed.year_estimate);
+  if (parsed.colour && parsed.colour !== 'Unknown') tags.push(parsed.colour);
+  if (parsed.body_type && parsed.body_type !== 'Unknown') tags.push(parsed.body_type);
+  if (parsed.condition && parsed.condition !== 'Unknown') tags.push('Condition: ' + parsed.condition);
+  if (parsed.notable_features?.length) parsed.notable_features.slice(0,3).forEach(f => tags.push(f));
+
+  const metaEl = document.getElementById('describeMeta');
+  metaEl.innerHTML = tags.map(t => `<span class="describe-tag">${t}</span>`).join('');
+
+  // No image download for describe mode
+  document.getElementById('dlBtn').classList.remove('show');
+  document.getElementById('procBadge').textContent = '✓ Analysis done';
+  document.getElementById('procBadge').className = 'badge done';
+}
+
+// ── Helpers ───────────────────────────────────────────────
+function showResult(url) {
+  const pi = document.getElementById('procImg');
+  pi.src = url; pi.style.display = 'block';
+  document.getElementById('procHint').style.display = 'none';
+  document.getElementById('procBadge').textContent = '✓ Done';
+  document.getElementById('procBadge').className = 'badge done';
+  const dl = document.getElementById('dlBtn');
+  dl.href = url; dl.classList.add('show');
+}
+
+function applyMosaic(ctx, x, y, w, h, ts) {
   if (w <= 0 || h <= 0) return;
   const d = ctx.getImageData(x, y, w, h); const px = d.data;
   for (let ty = 0; ty < h; ty += ts) {
     for (let tx = 0; tx < w; tx += ts) {
-      const sx = Math.min(tx + (ts>>1), w-1), sy = Math.min(ty + (ts>>1), h-1);
-      const si = (sy*w + sx)*4;
-      const r = px[si], g = px[si+1], b = px[si+2];
-      for (let py = ty; py < Math.min(ty+ts, h); py++)
-        for (let qx = tx; qx < Math.min(tx+ts, w); qx++) {
-          const i = (py*w+qx)*4; px[i]=r; px[i+1]=g; px[i+2]=b;
+      const sx = Math.min(tx+(ts>>1), w-1), sy = Math.min(ty+(ts>>1), h-1);
+      const si = (sy*w+sx)*4;
+      const r=px[si], g=px[si+1], b=px[si+2];
+      for (let py=ty; py<Math.min(ty+ts,h); py++)
+        for (let qx=tx; qx<Math.min(tx+ts,w); qx++) {
+          const i=(py*w+qx)*4; px[i]=r; px[i+1]=g; px[i+2]=b;
         }
     }
   }
   ctx.putImageData(d, x, y);
 }
+
+// ── Auth ──────────────────────────────────────────────────
+window.switchTab = function(tab) {
+  const isLogin = tab === 'login';
+  document.getElementById('tabLogin').classList.toggle('active', isLogin);
+  document.getElementById('tabSignup').classList.toggle('active', !isLogin);
+  document.getElementById('loginForm').style.display = isLogin ? 'block' : 'none';
+  document.getElementById('signupForm').style.display = isLogin ? 'none' : 'block';
+  clearMsg();
+};
+
+function showMsg(type, msg) { const e=document.getElementById('authMsg'); e.textContent=(type==='ok'?'✓ ':'⚠ ')+msg; e.className='auth-msg '+type; }
+function clearMsg() { const e=document.getElementById('authMsg'); e.className='auth-msg'; e.textContent=''; }
+
+window.doLogin = function() {
+  const email=document.getElementById('loginEmail').value.trim();
+  const pw=document.getElementById('loginPw').value;
+  if (!email||!pw) { showMsg('err','Please fill in all fields.'); return; }
+  const stored=JSON.parse(localStorage.getItem('ap_user')||'null');
+  if (stored&&stored.email===email&&stored.pw===btoa(pw)) loginSuccess(stored);
+  else if (!stored) showMsg('err','No account found. Please sign up first.');
+  else showMsg('err','Incorrect email or password.');
+};
+
+window.doSignup = function() {
+  const first=document.getElementById('signupFirst').value.trim();
+  const last=document.getElementById('signupLast').value.trim();
+  const email=document.getElementById('signupEmail').value.trim();
+  const pw=document.getElementById('signupPw').value;
+  const terms=document.getElementById('termsChk').checked;
+  if (!first||!last) { showMsg('err','Please enter your full name.'); return; }
+  if (!email.includes('@')) { showMsg('err','Please enter a valid email.'); return; }
+  if (pw.length<8) { showMsg('err','Password must be at least 8 characters.'); return; }
+  if (!terms) { showMsg('err','Please agree to the Terms of Service.'); return; }
+  const user={first,last,email,pw:btoa(pw),initials:(first[0]+last[0]).toUpperCase()};
+  localStorage.setItem('ap_user',JSON.stringify(user));
+  loginSuccess(user);
+};
+
+function loginSuccess(user) {
+  showMsg('ok',`Welcome${user.first?', '+user.first:''}! Redirecting…`);
+  setTimeout(()=>{ setUserNav(user); goHome(); }, 900);
+}
+
+window.socialDemo = function(p) { showMsg('ok',`${p} sign-in coming soon — use email for now!`); };
+
+function setUserNav(user) {
+  document.getElementById('guestBtns').style.display='none';
+  document.getElementById('userChip').classList.add('show');
+  document.getElementById('chipInitials').textContent=user.initials||'?';
+  document.getElementById('chipName').textContent=user.first||'Account';
+  document.getElementById('dropName').textContent=(user.first+' '+user.last).trim();
+  document.getElementById('dropEmail').textContent=user.email;
+}
+
+window.doLogout = function() {
+  closeDrop();
+  document.getElementById('guestBtns').style.display='flex';
+  document.getElementById('userChip').classList.remove('show');
+};
+
+window.toggleDrop = function() { document.getElementById('userDrop').classList.toggle('open'); };
+window.closeDrop  = function() { document.getElementById('userDrop').classList.remove('open'); };
+document.addEventListener('click', e => { if (!e.target.closest('#userChip')&&!e.target.closest('#userDrop')) closeDrop(); });
+
+window.pwStrength = function(v) {
+  let s=0;
+  if(v.length>=8)s++; if(/[A-Z]/.test(v))s++; if(/[0-9]/.test(v))s++; if(/[^A-Za-z0-9]/.test(v))s++;
+  const fill=document.getElementById('pwFill');
+  fill.style.width=['0%','25%','50%','75%','100%'][s];
+  fill.style.background=['','#e74c3c','#e67e22','#f1c40f','#27ae60'][s];
+};
+
+// ── Init ──────────────────────────────────────────────────
+(function() {
+  const u=JSON.parse(localStorage.getItem('ap_user')||'null');
+  if(u&&u.email) setUserNav(u);
+})();
 </script>
 </body>
 </html>
